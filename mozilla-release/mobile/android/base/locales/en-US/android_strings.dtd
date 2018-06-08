@@ -968,6 +968,12 @@ See also https://bug1409261.bmoattachments.org/attachment.cgi?id=8919897 -->
 <!ENTITY tracker_info "Tracker Info">
 <!ENTITY block_all "Block all">
 <!ENTITY unblock_all "Unblock all">
+<!ENTITY cc_block "Block">
+<!ENTITY cc_unblock "Unblock">
+<!ENTITY cc_trust "Trust">
+<!ENTITY cc_untrust "Untrust">
+<!ENTITY cc_restrict "Restrict">
+<!ENTITY cc_unrestrict "Unrestrict">
 
 <!-- General Settings - Search-->
 <!ENTITY pref_search_category "Search">

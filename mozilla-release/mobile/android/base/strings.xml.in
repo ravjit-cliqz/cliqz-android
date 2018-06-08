@@ -721,6 +721,12 @@
   <string name="block_all">&block_all;</string>
   <string name="unblock_all">&unblock_all;</string>
   <string name="num_blocked">&num_blocked;</string>
+  <string name="cc_block">&cc_block;</string>
+  <string name="cc_unblock">&cc_unblock;</string>
+  <string name="cc_trust">&cc_trust;</string>
+  <string name="cc_untrust">&cc_untrust;</string>
+  <string name="cc_restrict">&cc_restrict;</string>
+  <string name="cc_unrestrict">&cc_unrestrict;</string>
   <plurals name="total_trackers_found">
       <item quantity="zero">&zero_trackers_found;</item>
       <item quantity="one">&one_trackers_found;</item>
