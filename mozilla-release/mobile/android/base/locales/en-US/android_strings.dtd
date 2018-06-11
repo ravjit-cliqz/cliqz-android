@@ -927,13 +927,13 @@ See also https://bug1409261.bmoattachments.org/attachment.cgi?id=8919897 -->
 <!-- Control Center -->
 <!ENTITY title_overview "OVERVIEW">
 <!ENTITY title_site_trackers "SITE TRACKERS">
-<!ENTITY title_global_trackers "GLOBAL TRACKERS">
-<!ENTITY zero_trackers_found "\u0025d Trackers found">
-<!ENTITY one_trackers_found "\u0025d Tracker found">
-<!ENTITY two_trackers_found "\u0025d Trackers found">
-<!ENTITY few_trackers_found "\u0025d Trackers found">
-<!ENTITY many_trackers_found "\u0025d Trackers found">
-<!ENTITY other_trackers_found "\u0025d Trackers found">
+<!ENTITY title_global_trackers "ALL TRACKERS">
+<!ENTITY zero_trackers_found "\u0025d \n Trackers found">
+<!ENTITY one_trackers_found "\u0025d \n Tracker found">
+<!ENTITY two_trackers_found "\u0025d \n Trackers found">
+<!ENTITY few_trackers_found "\u0025d \n Trackers found">
+<!ENTITY many_trackers_found "\u0025d \n Trackers found">
+<!ENTITY other_trackers_found "\u0025d \n Trackers found">
 <!ENTITY zero_trackers_blocked "\u0025d Trackers blocked">
 <!ENTITY one_trackers_blocked "\u0025d Tracker blocked">
 <!ENTITY two_trackers_blocked "\u0025d Trackers blocked">
@@ -984,7 +984,7 @@ See also https://bug1409261.bmoattachments.org/attachment.cgi?id=8919897 -->
 <!ENTITY settings_menu "Settings menu">
 <!ENTITY on_this_site "On this site">
 <!ENTITY trackers "TRACKERS">
-<!ENTITY blocked "BLOCKED">
+<!ENTITY blocked "Blocked">
 <!ENTITY num_blocked "\u0025d BLOCKED">
 <!ENTITY tracker_info "Tracker Info">
 <!ENTITY block_all "Block all">

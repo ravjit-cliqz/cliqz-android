@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white">
+    android:background="@color/cc_transparency">
 
 
     <RelativeLayout
@@ -38,14 +38,14 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/domain_name"
             android:layout_centerHorizontal="true"
-            android:padding="10dp"
+            android:padding="2dp"
             android:textColor="@android:color/black"
             android:textSize="20sp"
             tools:text="11 trackers blocked" />
 
         <RelativeLayout
             android:id="@+id/pause_ghostery_button"
-            android:layout_width="250dp"
+            android:layout_width="225dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:text="@string/pause_ghostery"
-                android:textColor="@android:color/black"
+                android:textColor="@color/cc_text_color"
                 android:textSize="16sp" />
 
             <ImageView
@@ -69,9 +69,9 @@
                 android:layout_height="24dp"
                 android:layout_alignBottom="@id/button_text"
                 android:layout_alignTop="@id/button_text"
+                android:layout_centerVertical="true"
                 android:layout_toLeftOf="@id/button_text"
                 android:layout_toStartOf="@id/button_text"
-                android:layout_centerVertical="true"
                 app:srcCompat="@drawable/ic_pause"
                 tools:ignore="ContentDescription" />
 
@@ -79,7 +79,7 @@
 
         <RelativeLayout
             android:id="@+id/restrict_site_button"
-            android:layout_width="250dp"
+            android:layout_width="225dp"
             android:layout_height="wrap_content"
             android:layout_above="@id/pause_ghostery_button"
             android:layout_centerHorizontal="true"
@@ -93,7 +93,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:text="@string/restrict_site"
-                android:textColor="@android:color/black"
+                android:textColor="@color/cc_text_color"
                 android:textSize="16sp" />
 
             <ImageView
@@ -102,17 +102,17 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/button_text"
                 android:layout_alignTop="@id/button_text"
+                android:layout_centerVertical="true"
                 android:layout_toLeftOf="@id/button_text"
                 android:layout_toStartOf="@id/button_text"
-                android:layout_centerVertical="true"
-                app:srcCompat="@drawable/ic_block"
+                app:srcCompat="@drawable/ic_restrict"
                 tools:ignore="ContentDescription" />
 
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/trust_site_button"
-            android:layout_width="250dp"
+            android:layout_width="225dp"
             android:layout_height="wrap_content"
             android:layout_above="@id/restrict_site_button"
             android:layout_centerHorizontal="true"
@@ -126,7 +126,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:text="@string/trust_site"
-                android:textColor="@android:color/black"
+                android:textColor="@color/cc_text_color"
                 android:textSize="16sp" />
 
             <ImageView
@@ -149,19 +149,24 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:behavior_hideable="false"
-        app:behavior_peekHeight="60dp"
+        app:behavior_peekHeight="65dp"
         app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:background="@drawable/cc_notch_shadow" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:background="@color/general_blue_color"
+            android:background="@android:color/white"
             android:drawableTop="@drawable/notch"
             android:gravity="center"
             android:padding="5dp"
             android:text="@string/enhanced_options"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"
+            android:textColor="@color/general_blue_color"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <RelativeLayout
@@ -169,12 +174,17 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:background="@android:color/white"
-            android:padding="10dp">
+            android:paddingBottom="10dp"
+            android:paddingEnd="15dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingStart="15dp"
+            android:paddingTop="5dp">
 
             <ImageView
                 android:id="@+id/enhanced_tracking_icon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
@@ -190,7 +200,7 @@
                 android:padding="5dp"
                 android:text="3"
                 android:textColor="@color/general_blue_color"
-                android:textSize="20sp" />
+                android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/enhanced_tracking_text"
@@ -202,12 +212,12 @@
                 android:padding="5dp"
                 android:text="@string/enhanced_anti_tracking"
                 android:textColor="@color/general_blue_color"
-                android:textSize="12sp" />
+                android:textSize="16sp" />
 
             <ImageView
                 android:id="@+id/enhanced_tracking_info_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_centerVertical="true"
                 android:layout_toEndOf="@id/enhanced_tracking_text"
                 android:layout_toRightOf="@id/enhanced_tracking_text"
@@ -220,21 +230,32 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_centerVertical="true" />
+                android:layout_centerVertical="true"
+                android:theme="@style/Theme.ToogleTheme" />
 
         </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/cc_line_separator" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:background="@android:color/white"
-            android:padding="10dp">
+            android:paddingBottom="10dp"
+            android:paddingEnd="15dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingStart="15dp"
+            android:paddingTop="10dp">
 
             <ImageView
                 android:id="@+id/enhanced_blocking_icon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
@@ -250,7 +271,7 @@
                 android:padding="5dp"
                 android:text="3"
                 android:textColor="@color/general_blue_color"
-                android:textSize="20sp" />
+                android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/enhanced_blocking_text"
@@ -262,12 +283,12 @@
                 android:padding="5dp"
                 android:text="@string/enhanced_ad_blocking"
                 android:textColor="@color/general_blue_color"
-                android:textSize="12sp" />
+                android:textSize="16sp" />
 
             <ImageView
                 android:id="@+id/enhanced_blocking_info_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_centerVertical="true"
                 android:layout_toEndOf="@id/enhanced_blocking_text"
                 android:layout_toRightOf="@id/enhanced_blocking_text"
@@ -280,21 +301,32 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_centerVertical="true" />
+                android:layout_centerVertical="true"
+                android:theme="@style/Theme.ToogleTheme" />
 
         </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/cc_line_separator" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:background="@android:color/white"
-            android:padding="10dp">
+            android:paddingBottom="10dp"
+            android:paddingEnd="15dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingStart="15dp"
+            android:paddingTop="10dp">
 
             <ImageView
                 android:id="@+id/smart_blocking_icon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
@@ -310,7 +342,7 @@
                 android:padding="5dp"
                 android:text="3"
                 android:textColor="@color/general_blue_color"
-                android:textSize="20sp" />
+                android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/smart_blocking_text"
@@ -322,12 +354,12 @@
                 android:padding="5dp"
                 android:text="@string/smart_blocking"
                 android:textColor="@color/general_blue_color"
-                android:textSize="12sp" />
+                android:textSize="16sp" />
 
             <ImageView
                 android:id="@+id/info_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_centerVertical="true"
                 android:layout_toEndOf="@id/smart_blocking_text"
                 android:layout_toRightOf="@id/smart_blocking_text"
@@ -335,12 +367,13 @@
                 android:src="@drawable/ic_info_gray" />
 
             <android.support.v7.widget.SwitchCompat
-                android:id="@+id/enhanced_at_switch"
+                android:id="@+id/smart_blocking_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_centerVertical="true" />
+                android:layout_centerVertical="true"
+                android:theme="@style/Theme.ToogleTheme" />
 
         </RelativeLayout>
 
