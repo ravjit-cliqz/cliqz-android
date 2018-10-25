@@ -109,10 +109,7 @@ afterEvaluate {
                     // Deprecation, because we do use deprecated API for compatibility.
                     "-Xlint:-deprecation",
                     // Serial, because we don't use Java serialization.
-                    "-Xlint:-serial",
-                    // Turn all remaining warnings into errors,
-                    // unless marked by @SuppressWarnings.
-                    "-Werror"]
+                    "-Xlint:-serial"]
             }
         }
 

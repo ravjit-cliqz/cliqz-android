@@ -64,6 +64,13 @@
                   android:exported="true"
                   android:theme="@style/Gecko.App" />
 
+        <activity
+            android:name="org.mozilla.gecko.vpn.DisconnectVPN"
+            android:autoRemoveFromRecents="true"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:taskAffinity=".DisconnectVPN"/>
+
         <!-- Bug 1256615 / Bug 1268455: We published an .App alias and we need to maintain it
              forever.  If we don't, home screen shortcuts will disappear because the intent
              filter details change. -->
@@ -184,6 +191,42 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity-alias>
+
+
+        <service
+            android:name="org.mozilla.gecko.vpn.core.OpenVPNService"
+            android:permission="android.permission.BIND_VPN_SERVICE"
+            android:process=":openvpn">
+            <intent-filter>
+                <action android:name="android.net.VpnService" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="org.mozilla.gecko.vpn.api.ExternalOpenVPNService"
+            android:process=":openvpn"
+            tools:ignore="ExportedService">
+            <intent-filter>
+                <action android:name="de.blinkt.openvpn.api.IOpenVPNAPIService" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="org.mozilla.gecko.vpn.core.OpenVPNStatusService"
+            android:exported="false"
+            android:process=":openvpn" />
+        <service
+            android:name=".OpenVPNTileService"
+            android:label="@string/qs_title"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            android:value="true">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.service.quicksettings.ACTIVE_TILE"
+                android:value="false" />
+
+        </service>
 
         <service android:name="org.mozilla.gecko.GeckoService" />
 

@@ -27,8 +27,12 @@ android {
         testInstrumentationRunner 'org.mozilla.gecko.FennecInstrumentationTestRunner'
         // Used by Robolectric based tests; see TestRunner.
         buildConfigField 'String', 'BUILD_DIR', "\"${project.buildDir}\""
+        //buildConfigField 'boolean', 'openvpn3', 'false'
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
+        ndk {
+            abiFilters "armeabi-v7a", "x86"
+        }
     }
     signingConfigs {
         if (System.getenv('CERT_PATH') && System.getenv('CERT_PASS')) {
@@ -121,6 +125,11 @@ android {
             dimension "skin"
             /* Cliqz start */
             versionCode 5
+            externalNativeBuild {
+                cmake {
+                    arguments "-DFLAVOR=PHOTON"
+                }
+            }
             /* Cliqz end */
         }
         /* Cliqz start */
@@ -130,13 +139,27 @@ android {
         bond {
             dimension "skin"
             versionCode 5
+            externalNativeBuild {
+                cmake {
+                    arguments "-DFLAVOR=BOND"
+                }
+            }
         }
 
         standard {
             dimension "skin"
             versionCode 5 //version code can be same as premium because its a different app and package name is different
+            externalNativeBuild {
+                cmake {
+                    arguments "-DFLAVOR=STANDARD"
+                }
+            }
         }
         /* Cliqz end */
+    }
+
+    dexOptions {
+        javaMaxHeapSize "4g"
     }
 
     sourceSets {
@@ -234,7 +257,7 @@ android {
         //photon should contain some implementation of CC. We take the implementation from standard version
         photon {
             java {
-                srcDir "${topsrcdir}/mobile/android/standard/java"
+                srcDir "${topsrcdir}/mobile/android/bond/java"
             }
         }
         bond {
@@ -244,6 +267,12 @@ android {
             }
             res {
                 srcDir "${topsrcdir}/mobile/android/app/src/photon/res" //need to include the sources in the photon folder
+            }
+            assets {
+                srcDir "${topsrcdir}/mobile/build/ovpnassets"
+            }
+            jniLibs {
+                srcDir "${topsrcdir}/mobile/android/bond/jniLibs"
             }
         }
         standard {
@@ -269,6 +298,11 @@ android {
             maxParallelForks 1
         }
     }
+//    externalNativeBuild {
+//        cmake {
+//            path file('../bond/cpp/CMakeLists.txt')
+//        }
+//    }
 }
 
 dependencies {
@@ -279,49 +313,40 @@ dependencies {
     implementation "com.android.support:design:$support_library_version"
     implementation "com.android.support:customtabs:$support_library_version"
     implementation "com.android.support:palette-v7:$support_library_version"
-
     if (mozconfig.substs.MOZ_NATIVE_DEVICES) {
         implementation "com.android.support:mediarouter-v7:$support_library_version"
         implementation "com.google.android.gms:play-services-basement:$google_play_services_version"
         implementation "com.google.android.gms:play-services-base:$google_play_services_version"
         implementation "com.google.android.gms:play-services-cast:$google_play_services_version"
     }
-
     if (mozconfig.substs.MOZ_INSTALL_TRACKING) {
         implementation "com.google.android.gms:play-services-analytics:$google_play_services_version"
         implementation "com.google.android.gms:play-services-basement:$google_play_services_version"
     }
-
     if (mozconfig.substs.MOZ_ANDROID_GCM) {
         implementation "com.google.android.gms:play-services-basement:$google_play_services_version"
         implementation "com.google.android.gms:play-services-base:$google_play_services_version"
         implementation "com.google.android.gms:play-services-gcm:$google_play_services_version"
         implementation "com.google.android.gms:play-services-measurement:$google_play_services_version"
     }
-
     // Include LeakCanary in local builds, but not in official builds.  Mach
     // builds target the official audience, so LeakCanary will not be included
     // in any Mach build.
     localImplementation 'com.squareup.leakcanary:leakcanary-android:1.4-beta1'
     officialImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta1'
     testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta1'
-
     implementation project(path: ':geckoview')
     implementation project(path: ':thirdparty')
-
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.robolectric:robolectric:3.8'
     testImplementation 'org.simpleframework:simple-http:6.0.1'
     testImplementation 'org.mockito:mockito-core:1.10.19'
-
     // Including the Robotium JAR directly can cause issues with dexing.
     androidTestImplementation 'com.jayway.android.robotium:robotium-solo:5.5.4'
-
     /*Cliqz Start*/
     //Library for control center donut - chart
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     /*Cliqz End*/
-
 }
 
 // TODO: (bug 1261486): This impl is not robust -
