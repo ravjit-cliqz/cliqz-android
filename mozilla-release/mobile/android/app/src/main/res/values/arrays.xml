@@ -177,5 +177,10 @@
         <item>@string/pref_search_complementary_engine_start_page</item>
         <item>@string/pref_search_complementary_engine_qwant</item>
     </string-array>
+
+    <string-array name="vpn_available_countries">
+        <item>@string/country_germany</item>
+        <item>@string/country_united_states</item>
+    </string-array>
     <!-- Cliqz end -->
 </resources>

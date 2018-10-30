@@ -2,7 +2,6 @@
  * Copyright (c) 2012-2016 Arne Schwabe
  * Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
  */
-
 package org.mozilla.gecko.vpn.core;
 
 import android.Manifest.permission;
@@ -22,6 +21,7 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.net.VpnService;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Handler.Callback;
 import android.os.IBinder;
@@ -36,6 +36,8 @@ import android.widget.Toast;
 
 import org.mozilla.gecko.BrowserApp;
 import org.mozilla.gecko.R;
+import org.mozilla.gecko.vpn.DisconnectVPN;
+import org.mozilla.gecko.vpn.LaunchVPN;
 import org.mozilla.gecko.vpn.VpnProfile;
 import org.mozilla.gecko.vpn.api.ExternalAppDatabase;
 
@@ -51,7 +53,6 @@ import java.util.Vector;
 
 import static org.mozilla.gecko.vpn.core.ConnectionStatus.LEVEL_CONNECTED;
 import static org.mozilla.gecko.vpn.core.ConnectionStatus.LEVEL_WAITING_FOR_USER_INPUT;
-import static org.mozilla.gecko.vpn.core.NetworkSpace.IpAddress;
 
 public class OpenVPNService extends VpnService implements VpnStatus.StateListener, Callback, VpnStatus.ByteCountListener, IOpenVPNServiceInternal {
     public static final String START_SERVICE = "de.blinkt.openvpn.START_SERVICE";
@@ -64,8 +65,8 @@ public class OpenVPNService extends VpnService implements VpnStatus.StateListene
 
     public static final String VPNSERVICE_TUN = "vpnservice-tun";
     public final static String ORBOT_PACKAGE_NAME = "org.torproject.android";
-    private static final String PAUSE_VPN = "de.blinkt.openvpn.PAUSE_VPN";
-    private static final String RESUME_VPN = "de.blinkt.openvpn.RESUME_VPN";
+    public static final String PAUSE_VPN = "de.blinkt.openvpn.PAUSE_VPN";
+    public static final String RESUME_VPN = "de.blinkt.openvpn.RESUME_VPN";
     private static final int PRIORITY_MIN = -2;
     private static final int PRIORITY_DEFAULT = 0;
     private static final int PRIORITY_MAX = 2;
@@ -226,7 +227,7 @@ public class OpenVPNService extends VpnService implements VpnStatus.StateListene
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         int icon = getIconByConnectionStatus(status);
 
-        Notification.Builder nbuilder = new Notification.Builder(this);
+        android.app.Notification.Builder nbuilder = new Notification.Builder(this);
 
         int priority;
         if (channel.equals(NOTIFICATION_CHANNEL_BG_ID))
@@ -264,14 +265,14 @@ public class OpenVPNService extends VpnService implements VpnStatus.StateListene
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             lpNotificationExtras(nbuilder, Notification.CATEGORY_SERVICE);
 
-        if (Build.VERSION.SDK_INT >= 26) {
-            //noinspection NewApi
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            //noinspection NewApi
 //            nbuilder.setChannelId(channel);
 //            if (mProfile != null)
 //                //noinspection NewApi
 //                nbuilder.setShortcutId(mProfile.getUUIDString());
-
-        }
+//
+//        }
 
         if (tickerText != null && !tickerText.equals(""))
             nbuilder.setTicker(tickerText);
@@ -321,28 +322,28 @@ public class OpenVPNService extends VpnService implements VpnStatus.StateListene
     private int getIconByConnectionStatus(ConnectionStatus level) {
         switch (level) {
             case LEVEL_CONNECTED:
-                return R.drawable.status_icon_readercache;
+                return R.drawable.ic_ghosty;
             case LEVEL_AUTH_FAILED:
             case LEVEL_NONETWORK:
             case LEVEL_NOTCONNECTED:
-                return R.drawable.status_icon_readercache;
+                return R.drawable.ic_ghosty_forget;
             case LEVEL_CONNECTING_NO_SERVER_REPLY_YET:
             case LEVEL_WAITING_FOR_USER_INPUT:
-                return R.drawable.status_icon_readercache;
+                return R.drawable.cliqz_intro_dots;
             case LEVEL_CONNECTING_SERVER_REPLIED:
-                return R.drawable.status_icon_readercache;
+                return R.drawable.cliqz_intro_cb_checked;
             case LEVEL_VPNPAUSED:
                 return android.R.drawable.ic_media_pause;
             case UNKNOWN_LEVEL:
             default:
-                return R.drawable.status_icon_readercache;
+                return R.drawable.ab_copy;
 
         }
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void jbNotificationExtras(int priority,
-                                      Notification.Builder nbuilder) {
+                                      android.app.Notification.Builder nbuilder) {
         try {
             if (priority != 0) {
                 Method setpriority = nbuilder.getClass().getMethod("setPriority", int.class);
@@ -361,13 +362,14 @@ public class OpenVPNService extends VpnService implements VpnStatus.StateListene
 
     }
 
+//    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     private void addVpnActionsToNotification(Notification.Builder nbuilder) {
-        //Intent disconnectVPN = new Intent(this, DisconnectVPN.class);
-        //disconnectVPN.setAction(DISCONNECT_VPN);
-        //PendingIntent disconnectPendingIntent = PendingIntent.getActivity(this, 0, disconnectVPN, 0);
+        Intent disconnectVPN = new Intent(this, DisconnectVPN.class);
+        disconnectVPN.setAction(DISCONNECT_VPN);
+        PendingIntent disconnectPendingIntent = PendingIntent.getActivity(this, 0, disconnectVPN, 0);
 
-//        nbuilder.addAction(R.drawable.ic_close_clear,
-//                getString(R.string.cancel_connection), disconnectPendingIntent);
+        nbuilder.addAction(R.drawable.ic_cancel,
+                getString(R.string.cancel_connection), disconnectPendingIntent);
 
         Intent pauseVPN = new Intent(this, OpenVPNService.class);
         if (mDeviceStateReceiver == null || !mDeviceStateReceiver.isUserPaused()) {
@@ -385,14 +387,13 @@ public class OpenVPNService extends VpnService implements VpnStatus.StateListene
     }
 
     PendingIntent getUserInputIntent(String needed) {
-//        Intent intent = new Intent(getApplicationContext(), LaunchVPN.class);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-//        intent.putExtra("need", needed);
-//        Bundle b = new Bundle();
-//        b.putString("need", needed);
-//        PendingIntent pIntent = PendingIntent.getActivity(this, 12, intent, 0);
-//        return pIntent;
-        return null;
+        Intent intent = new Intent(getApplicationContext(), LaunchVPN.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        intent.putExtra("need", needed);
+        Bundle b = new Bundle();
+        b.putString("need", needed);
+        PendingIntent pIntent = PendingIntent.getActivity(this, 12, intent, 0);
+        return pIntent;
     }
 
     PendingIntent getGraphPendingIntent() {
@@ -501,9 +502,9 @@ public class OpenVPNService extends VpnService implements VpnStatus.StateListene
             int profileVersion = intent.getIntExtra(getPackageName() + ".profileVersion", 0);
             // Try for 10s to get current version of the profile
             mProfile = ProfileManager.get(this, profileUUID, profileVersion, 100);
-            if (Build.VERSION.SDK_INT >= 25) {
-                updateShortCutUsage(mProfile);
-            }
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+//                updateShortCutUsage(mProfile);
+//            }
 
         } else {
             /* The intent is null when we are set as always-on or the service has been restarted. */
@@ -545,16 +546,13 @@ public class OpenVPNService extends VpnService implements VpnStatus.StateListene
         return START_STICKY;
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
-    private void updateShortCutUsage(VpnProfile profile) {
-        if (profile == null)
-            return;
-//        ShortcutManager shortcutManager = null;
-//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-//            shortcutManager = getSystemService(ShortcutManager.class);
-//        }
+//    @RequiresApi(Build.VERSION_CODES.N_MR1)
+//    private void updateShortCutUsage(VpnProfile profile) {
+//        if (profile == null)
+//            return;
+//        ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);
 //        shortcutManager.reportShortcutUsed(profile.getUUIDString());
-    }
+//    }
 
     private void startOpenVPN() {
         try {
@@ -772,15 +770,15 @@ public class OpenVPNService extends VpnService implements VpnStatus.StateListene
             builder.setMtu(mMtu);
         }
 
-        Collection<IpAddress> positiveIPv4Routes = mRoutes.getPositiveIPList();
-        Collection<IpAddress> positiveIPv6Routes = mRoutesv6.getPositiveIPList();
+        Collection<NetworkSpace.IpAddress> positiveIPv4Routes = mRoutes.getPositiveIPList();
+        Collection<NetworkSpace.IpAddress> positiveIPv6Routes = mRoutesv6.getPositiveIPList();
 
         if ("samsung".equals(Build.BRAND) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && mDnslist.size() >= 1) {
             // Check if the first DNS Server is in the VPN range
             try {
-                IpAddress dnsServer = new IpAddress(new CIDRIP(mDnslist.get(0), 32), true);
+                NetworkSpace.IpAddress dnsServer = new NetworkSpace.IpAddress(new CIDRIP(mDnslist.get(0), 32), true);
                 boolean dnsIncluded = false;
-                for (IpAddress net : positiveIPv4Routes) {
+                for (NetworkSpace.IpAddress net : positiveIPv4Routes) {
                     if (net.containsNet(dnsServer)) {
                         dnsIncluded = true;
                     }
@@ -797,9 +795,9 @@ public class OpenVPNService extends VpnService implements VpnStatus.StateListene
             }
         }
 
-        IpAddress multicastRange = new IpAddress(new CIDRIP("224.0.0.0", 3), true);
+        NetworkSpace.IpAddress multicastRange = new NetworkSpace.IpAddress(new CIDRIP("224.0.0.0", 3), true);
 
-        for (IpAddress route : positiveIPv4Routes) {
+        for (NetworkSpace.IpAddress route : positiveIPv4Routes) {
             try {
 
                 if (multicastRange.containsNet(route))
@@ -811,7 +809,7 @@ public class OpenVPNService extends VpnService implements VpnStatus.StateListene
             }
         }
 
-        for (IpAddress route6 : positiveIPv6Routes) {
+        for (NetworkSpace.IpAddress route6 : positiveIPv6Routes) {
             try {
                 builder.addRoute(route6.getIPv6Address(), route6.networkMask);
             } catch (IllegalArgumentException ia) {
@@ -998,13 +996,13 @@ public class OpenVPNService extends VpnService implements VpnStatus.StateListene
         CIDRIP route = new CIDRIP(dest, mask);
         boolean include = isAndroidTunDevice(device);
 
-        IpAddress gatewayIP = new IpAddress(new CIDRIP(gateway, 32), false);
+        NetworkSpace.IpAddress gatewayIP = new NetworkSpace.IpAddress(new CIDRIP(gateway, 32), false);
 
         if (mLocalIP == null) {
             VpnStatus.logError("Local IP address unset and received. Neither pushed server config nor local config specifies an IP addresses. Opening tun device is most likely going to fail.");
             return;
         }
-        IpAddress localNet = new IpAddress(mLocalIP, true);
+        NetworkSpace.IpAddress localNet = new NetworkSpace.IpAddress(mLocalIP, true);
         if (localNet.containsNet(gatewayIP))
             include = true;
 
@@ -1133,6 +1131,7 @@ public class OpenVPNService extends VpnService implements VpnStatus.StateListene
             // This also mean we are no longer connected, ignore bytecount messages until next
             // CONNECTED
             // Does not work :(
+            Log.d("###vpnservice", level.name());
             showNotification(VpnStatus.getLastCleanLogMessage(this),
                     VpnStatus.getLastCleanLogMessage(this), channel, 0, level);
 

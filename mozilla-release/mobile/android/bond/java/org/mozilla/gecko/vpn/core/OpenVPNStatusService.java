@@ -15,7 +15,6 @@ import android.os.ParcelFileDescriptor;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.util.Pair;
 
 import java.io.DataOutputStream;
@@ -101,7 +100,7 @@ public class OpenVPNStatusService extends Service implements VpnStatus.LogListen
                 return pipe[0];
             } catch (IOException e) {
                 e.printStackTrace();
-                if (Build.VERSION.SDK_INT >= 16) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
                     throw new RemoteException(e.getMessage());
                 }
                 return null;
@@ -134,7 +133,6 @@ public class OpenVPNStatusService extends Service implements VpnStatus.LogListen
     public void newLog(LogItem logItem) {
         Message msg = mHandler.obtainMessage(SEND_NEW_LOGITEM, logItem);
         msg.sendToTarget();
-        Log.d("#####LOG", logItem.toString());
     }
 
     @Override

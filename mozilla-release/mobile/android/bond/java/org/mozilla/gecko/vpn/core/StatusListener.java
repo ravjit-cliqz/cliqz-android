@@ -33,7 +33,7 @@ public class StatusListener {
             IServiceStatus serviceStatus = IServiceStatus.Stub.asInterface(service);
             try {
                 /* Check if this a local service ... */
-                if (service.queryLocalInterface("de.blinkt.openvpn.core.IServiceStatus") == null) {
+                if (service.queryLocalInterface("org.mozilla.gecko.vpn.core.IServiceStatus") == null) {
                     // Not a local service
                     VpnStatus.setConnectedVPNProfile(serviceStatus.getLastConnectedVPN());
                     VpnStatus.setTrafficHistory(serviceStatus.getTrafficHistory());

@@ -5,14 +5,14 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 
 import org.mozilla.gecko.GeckoSharedPrefs;
-
-import static org.mozilla.gecko.myoffrz.MyOffrzUtils.isMyOffrzSupportedForLang;
+import org.mozilla.gecko.R;
 
 /**
  * Copyright © Cliqz 2018
  */
 public class PreferenceManager {
 
+    private  static final String VPN_SELECTED_COUNTRY = "vpn.selected.country";
     private final SharedPreferences mAppSharedPreferences;
     private static PreferenceManager preferenceManager = null;
     private Context mContext;
@@ -52,6 +52,11 @@ public class PreferenceManager {
     public void setBlockNewTrackers(boolean value) {
         final SharedPreferences.Editor editor = mAppSharedPreferences.edit();
         editor.putBoolean(GeckoPreferences.PREFS_GHOSTERY_BLOCK_NEW_TRACKERS, value).apply();
+    }
+
+    public void setVpnCountry(String country) {
+        final SharedPreferences.Editor editor = mAppSharedPreferences.edit();
+        editor.putString(VPN_SELECTED_COUNTRY, country).apply();
     }
 
     public boolean isTelemetryEnabled() {
@@ -107,5 +112,9 @@ public class PreferenceManager {
 
     public boolean isBackgroundEnabled() {
         return  mAppSharedPreferences.getBoolean(GeckoPreferences.PREFS_CLIQZ_TAB_BACKGROUND_ENABLED,true);
+    }
+
+    public String getVpnSelectedCountry() {
+        return mAppSharedPreferences.getString(VPN_SELECTED_COUNTRY, mContext.getString(R.string.country_germany));
     }
 }

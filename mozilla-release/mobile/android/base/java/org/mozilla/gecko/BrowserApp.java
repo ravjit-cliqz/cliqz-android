@@ -201,7 +201,9 @@ import org.mozilla.gecko.util.WindowUtil;
 import org.mozilla.gecko.vpn.ConfigConverter;
 import org.mozilla.gecko.vpn.DisconnectVPN;
 import org.mozilla.gecko.vpn.LaunchVPN;
+import org.mozilla.gecko.vpn.core.ConnectionStatus;
 import org.mozilla.gecko.vpn.core.ProfileManager;
+import org.mozilla.gecko.vpn.core.VpnStatus;
 import org.mozilla.gecko.widget.ActionModePresenter;
 import org.mozilla.gecko.widget.AnchoredPopup;
 import org.mozilla.gecko.widget.AnimatedProgressBar;
@@ -1148,10 +1150,17 @@ public class BrowserApp extends GeckoApp
         if (m.getProfileByName("us-vpn") == null) {
             c.startImportTask(uri, "us-vpn");
         }
-//        else {
-//            //startOrStopVPN(m.getProfileByName("us-vpn"));
-//            VPNLaunchHelper.startOpenVpn(m.getProfileByName("us-vpn"), getActivity());
-//        }
+        VpnStatus.addStateListener(new VpnStatus.StateListener() {
+            @Override
+            public void updateState(String state, String logmessage, int localizedResId, ConnectionStatus level) {
+                Log.d("######", "#@$@#@#$@%@#");
+            }
+
+            @Override
+            public void setConnectedVPN(String uuid) {
+
+            }
+        });
         /*Cliqz End*/
     }
 

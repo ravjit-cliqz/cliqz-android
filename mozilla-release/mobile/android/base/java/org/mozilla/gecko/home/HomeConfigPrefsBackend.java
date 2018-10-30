@@ -5,23 +5,6 @@
 
 package org.mozilla.gecko.home;
 
-import static org.mozilla.gecko.home.HomeConfig.createBuiltinPanelConfig;
-
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.Locale;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.mozilla.gecko.GeckoSharedPrefs;
-import org.mozilla.gecko.home.HomeConfig.HomeConfigBackend;
-import org.mozilla.gecko.home.HomeConfig.OnReloadListener;
-import org.mozilla.gecko.home.HomeConfig.PanelConfig;
-import org.mozilla.gecko.home.HomeConfig.PanelType;
-import org.mozilla.gecko.home.HomeConfig.State;
-import org.mozilla.gecko.util.HardwareUtils;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -32,6 +15,24 @@ import android.support.annotation.VisibleForTesting;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.mozilla.gecko.BuildConfig;
+import org.mozilla.gecko.GeckoSharedPrefs;
+import org.mozilla.gecko.home.HomeConfig.HomeConfigBackend;
+import org.mozilla.gecko.home.HomeConfig.OnReloadListener;
+import org.mozilla.gecko.home.HomeConfig.PanelConfig;
+import org.mozilla.gecko.home.HomeConfig.PanelType;
+import org.mozilla.gecko.home.HomeConfig.State;
+import org.mozilla.gecko.util.HardwareUtils;
+
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.Locale;
+
+import static org.mozilla.gecko.home.HomeConfig.createBuiltinPanelConfig;
 
 public class HomeConfigPrefsBackend implements HomeConfigBackend {
     private static final String LOGTAG = "GeckoHomeConfigBackend";
@@ -76,7 +77,13 @@ public class HomeConfigPrefsBackend implements HomeConfigBackend {
         /* Cliqz start */
         // add Offrz panel, change panels order to be TopSites, history, MyOffrz, bookmarks
         panelConfigs.add(createBuiltinPanelConfig(mContext, PanelType.COMBINED_HISTORY));
-        panelConfigs.add(createBuiltinPanelConfig(mContext, PanelType.MY_OFFRZ));
+        if (BuildConfig.FLAVOR_skin.equals("bond")) {
+            panelConfigs.add(createBuiltinPanelConfig(mContext, PanelType.MY_OFFRZ, EnumSet.of(PanelConfig.Flags.DISABLED_PANEL)));
+            panelConfigs.add(createBuiltinPanelConfig(mContext, PanelType.VPN));
+        } else {
+            panelConfigs.add(createBuiltinPanelConfig(mContext, PanelType.MY_OFFRZ));
+            panelConfigs.add(createBuiltinPanelConfig(mContext, PanelType.VPN, EnumSet.of(PanelConfig.Flags.DISABLED_PANEL)));
+        }
         panelConfigs.add(createBuiltinPanelConfig(mContext, PanelType.BOOKMARKS));
         /* Cliqz end */
 
