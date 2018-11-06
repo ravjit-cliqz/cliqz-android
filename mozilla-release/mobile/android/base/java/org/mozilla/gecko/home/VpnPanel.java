@@ -190,29 +190,57 @@ public class VpnPanel extends HomeFragment implements View.OnClickListener,
         }
     };
 
+    private void animateTv() {
+        final String[] dots = {".", "..", "...", "....",".....","......"};
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int itr = 0;
+                while (shouldAnimate) {
+                    final int i = itr;
+                    itr++;
+                    mVpnButtonDesc.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mVpnButtonDesc.setText(dots[i%6]);
+                        }
+                    });
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+    }
+
     private void updateStateToConnecting() {
+        shouldAnimate = true;
+        animateTv();
         mVpnButtonTitle.setText("");
-        mVpnButtonDesc.setText(".....");
         mVpnButtonTitle.setTextColor(getResources().getColor(android.R.color.black));
         mVpnButtonDesc.setTextColor(getResources().getColor(android.R.color.black));
         mWorldMap.setImageResource(R.drawable.vpn_map_off);
         mVpnConnectButton.setBackground(getResources().getDrawable(R.drawable.vpn_button_connecting_animation));
         final RotateDrawable drawable = (RotateDrawable)mVpnConnectButton.getBackground();
-        ObjectAnimator animator = ObjectAnimator.ofInt(drawable, "level", 0, 10000);
+        final ObjectAnimator animator = ObjectAnimator.ofInt(drawable, "level", 0, 10000);
         animator.setRepeatCount(ValueAnimator.INFINITE);
-        //animator.setDuration(500);
+        animator.setDuration(500);
         animator.start();
         mVpnButtonTitle.setTextColor(getResources().getColor(R.color.general_blue_color));
         mVpnButtonDesc.setTextColor(getResources().getColor(R.color.general_blue_color));
+        mVpnStatusText.setText(R.string.vpn_connecting_message);
     }
 
     private void updateStateToConnected() {
+        shouldAnimate = false;
         PreferenceManager preferenceManager = PreferenceManager.getInstance(getContext());
         mVpnButtonTitle.setVisibility(View.GONE);
         vpnTimer.setVisibility(View.VISIBLE);
         vpnTimer.setBase(SystemClock.elapsedRealtime() - (System.currentTimeMillis() - preferenceManager.getVpnStartTime()));
         vpnTimer.start();
-        mVpnButtonDesc.setText("Disconnect");
+        mVpnButtonDesc.setText(R.string.vpn_disconnect);
         mVpnButtonTitle.setTextColor(getResources().getColor(R.color.general_blue_color));
         mVpnButtonDesc.setTextColor(getResources().getColor(R.color.general_blue_color));
         mVpnConnectButton.setBackground(getResources().getDrawable(R.drawable.vpn_button_background_on));
@@ -221,11 +249,12 @@ public class VpnPanel extends HomeFragment implements View.OnClickListener,
     }
 
     private void updateStateToConnect() {
+        shouldAnimate = false;
         vpnTimer.stop();
         vpnTimer.setVisibility(View.GONE);
         mVpnButtonTitle.setVisibility(View.VISIBLE);
         mVpnButtonTitle.setText("Vpn");
-        mVpnButtonDesc.setText("Connect");
+        mVpnButtonDesc.setText(R.string.vpn_connect);
         mVpnButtonTitle.setTextColor(getResources().getColor(android.R.color.black));
         mVpnButtonDesc.setTextColor(getResources().getColor(android.R.color.black));
         mVpnConnectButton.setBackground(getResources().getDrawable(R.drawable.vpn_button_background_off));

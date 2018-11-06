@@ -962,11 +962,14 @@
   <string name="prevent_ghostery_addon_dialog_message">&prevent_ghostery_addon_dialog_message;</string>
 
   <!-- Vpn -->
+  <string name="vpn">&vpn;</string>
   <string name="country_germany">&country_germany;</string>
   <string name="country_united_states">&country_united_states;</string>
   <string name="vpn_connect">&vpn_connect;</string>
+  <string name="vpn_disconnect">&vpn_disconnect;</string>
   <string name="vpn_turn_on_message">&vpn_turn_on_message;</string>
   <string name="vpn_connected_message">&vpn_connected_message;</string>
+  <string name="vpn_connecting_message">&vpn_connecting_message;</string>
   <!-- Cliqz end -->
 
 </resources>
