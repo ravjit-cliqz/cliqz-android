@@ -3,14 +3,18 @@ package org.mozilla.gecko.home;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.PendingIntent;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Paint;
 import android.graphics.drawable.RotateDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +24,9 @@ import android.widget.TextView;
 
 import org.mozilla.gecko.R;
 import org.mozilla.gecko.preferences.PreferenceManager;
-import org.mozilla.gecko.vpn.DisconnectVPN;
 import org.mozilla.gecko.vpn.LaunchVPN;
 import org.mozilla.gecko.vpn.core.ConnectionStatus;
+import org.mozilla.gecko.vpn.core.IOpenVPNServiceInternal;
 import org.mozilla.gecko.vpn.core.LogItem;
 import org.mozilla.gecko.vpn.core.OpenVPNService;
 import org.mozilla.gecko.vpn.core.ProfileManager;
@@ -44,6 +48,21 @@ public class VpnPanel extends HomeFragment implements View.OnClickListener,
     private Chronometer vpnTimer;
     private Handler mainHandler;
     private Boolean shouldAnimate = false;
+    private IOpenVPNServiceInternal mService;
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            mService = IOpenVPNServiceInternal.Stub.asInterface(service);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mService = null;
+        }
+
+    };
 
 
     @Nullable
@@ -80,7 +99,9 @@ public class VpnPanel extends HomeFragment implements View.OnClickListener,
         } else {
             updateStateToConnect();
         }
-
+        final Intent intent = new Intent(getContext(), OpenVPNService.class);
+        intent.setAction(OpenVPNService.START_SERVICE);
+        getActivity().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -89,42 +110,10 @@ public class VpnPanel extends HomeFragment implements View.OnClickListener,
             VpnCountriesDialog.show(getContext(), this);
         } else if (v.getId() == R.id.vpn_connect_button) {
             if (VpnStatus.isVPNAConnected()) {
-                Intent disconnectVPN = new Intent(getActivity(), DisconnectVPN.class);
-                startActivity(disconnectVPN);
+                disconnectVpn();
                 updateStateToConnect();
             } else {
-                final String vpnCountry = PreferenceManager.getInstance(getContext()).getVpnSelectedCountry();
-                final ProfileManager m = ProfileManager.getInstance(getContext());
-                final LaunchVPN launchVPN = new LaunchVPN(m.getProfileByName(
-                        vpnCountry.equalsIgnoreCase("Germany") ? "germany-vpn" : "us-vpn"), getActivity());
-
-                launchVPN.launchVPN();
-                final Intent pauseVPN = new Intent(getActivity(), OpenVPNService.class);
-                pauseVPN.setAction(OpenVPNService.PAUSE_VPN);
-                final Intent resumeVPN = new Intent(getActivity(), OpenVPNService.class);
-                resumeVPN.setAction(OpenVPNService.RESUME_VPN);
-                final PendingIntent pauseVPNPending = PendingIntent.getService(getActivity(), 0, pauseVPN, 0);
-                final PendingIntent resumeVPNPending = PendingIntent.getService(getActivity(), 0, resumeVPN, 0);
-                getView().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            pauseVPNPending.send();
-                        } catch (PendingIntent.CanceledException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },3000);
-                getView().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            resumeVPNPending.send();
-                        } catch (PendingIntent.CanceledException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },6000);
+                connectVpn();
             }
         }
 
@@ -133,6 +122,14 @@ public class VpnPanel extends HomeFragment implements View.OnClickListener,
     @Override
     public void onCheckChanged() {
         mSelectedCountry.setText(PreferenceManager.getInstance(getContext()).getVpnSelectedCountry());
+        disconnectVpn();
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                connectVpn();
+            }
+        }, 1000);
     }
 
     @Override
@@ -160,7 +157,6 @@ public class VpnPanel extends HomeFragment implements View.OnClickListener,
                 preferenceManager.setVpnStartTime(System.currentTimeMillis());
             }
         }
-
     }
 
     @Override
@@ -214,9 +210,57 @@ public class VpnPanel extends HomeFragment implements View.OnClickListener,
         }).start();
     }
 
+    private void connectVpn() {
+        final String vpnCountry = PreferenceManager.getInstance(getContext()).getVpnSelectedCountry();
+        final ProfileManager m = ProfileManager.getInstance(getContext());
+        final LaunchVPN launchVPN = new LaunchVPN(m.getProfileByName(
+                vpnCountry.equalsIgnoreCase("Germany") ? "germany-vpn" : "us-vpn"), getActivity());
+
+        launchVPN.launchVPN();
+        final Intent pauseVPN = new Intent(getActivity(), OpenVPNService.class);
+        pauseVPN.setAction(OpenVPNService.PAUSE_VPN);
+        final Intent resumeVPN = new Intent(getActivity(), OpenVPNService.class);
+        resumeVPN.setAction(OpenVPNService.RESUME_VPN);
+        final PendingIntent pauseVPNPending = PendingIntent.getService(getActivity(), 0, pauseVPN, 0);
+        final PendingIntent resumeVPNPending = PendingIntent.getService(getActivity(), 0, resumeVPN, 0);
+        getView().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    pauseVPNPending.send();
+                } catch (PendingIntent.CanceledException e) {
+                    e.printStackTrace();
+                }
+            }
+        },3000);
+        getView().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    resumeVPNPending.send();
+                } catch (PendingIntent.CanceledException e) {
+                    e.printStackTrace();
+                }
+            }
+        },5000);
+    }
+
+    private void disconnectVpn() {
+        ProfileManager.setConntectedVpnProfileDisconnected(getContext());
+        if (mService != null) {
+            try {
+                mService.stopVPN(false);
+            } catch (RemoteException e) {
+                VpnStatus.logException(e);
+            }
+        }
+    }
+
     private void updateStateToConnecting() {
         shouldAnimate = true;
         animateTv();
+        vpnTimer.stop();
+        vpnTimer.setVisibility(View.GONE);
         mVpnButtonTitle.setText("");
         mVpnButtonTitle.setTextColor(getResources().getColor(android.R.color.black));
         mVpnButtonDesc.setTextColor(getResources().getColor(android.R.color.black));
@@ -252,7 +296,7 @@ public class VpnPanel extends HomeFragment implements View.OnClickListener,
         vpnTimer.stop();
         vpnTimer.setVisibility(View.GONE);
         mVpnButtonTitle.setVisibility(View.VISIBLE);
-        mVpnButtonTitle.setText("Vpn");
+        mVpnButtonTitle.setText(R.string.vpn);
         mVpnButtonDesc.setText(R.string.vpn_connect);
         mVpnButtonTitle.setTextColor(getResources().getColor(android.R.color.black));
         mVpnButtonDesc.setTextColor(getResources().getColor(android.R.color.black));

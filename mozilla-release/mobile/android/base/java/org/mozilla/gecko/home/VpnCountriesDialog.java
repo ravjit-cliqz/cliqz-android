@@ -32,7 +32,6 @@ public class VpnCountriesDialog implements RadioGroup.OnCheckedChangeListener, D
         final LayoutInflater inflater = LayoutInflater.from(context);
         final View dialogView = inflater.inflate(R.layout.vpn_countries_dialog, null);
         final RadioGroup radioGroup = (RadioGroup) dialogView.findViewById(R.id.countries_radio_group);
-        radioGroup.setOnCheckedChangeListener(vpnCountriesDialog);
         final String [] availableCountries = context.getResources().getStringArray(R.array.vpn_available_countries);
         for (String country : availableCountries) {
             final RadioButton radioButton = new RadioButton(context);
@@ -42,8 +41,8 @@ public class VpnCountriesDialog implements RadioGroup.OnCheckedChangeListener, D
                 radioButton.setChecked(true);
             }
         }
+        radioGroup.setOnCheckedChangeListener(vpnCountriesDialog);
         builder.setView(dialogView);
-        builder.setNegativeButton(R.string.button_cancel, vpnCountriesDialog);
         builder.setPositiveButton(R.string.button_ok, vpnCountriesDialog);
         builder.show();
     }
