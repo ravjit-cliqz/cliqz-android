@@ -141,25 +141,24 @@ public class VpnPanel extends HomeFragment implements View.OnClickListener,
 
     @Override
     public void updateState(String state, String logmessage, int localizedResId, ConnectionStatus level) {
-        Log.d(LOGTAG, "state: " + state);
-        Log.d(LOGTAG, "level " + level.name());
-        if (level.equals(ConnectionStatus.LEVEL_AUTH_FAILED)) {
-        } else if (level.equals(ConnectionStatus.LEVEL_START)) {
-            if (mainHandler != null) {
-                mainHandler.post(run1);
+        if (isAdded()) {
+            if (level.equals(ConnectionStatus.LEVEL_START)) {
+                if (mainHandler != null) {
+                    mainHandler.post(run1);
+                }
+            } else if (level.equals(ConnectionStatus.LEVEL_CONNECTED)) {
+                shouldAnimate = false;
+                if (mainHandler != null) {
+                    mainHandler.post(run2);
+                }
+            } else if (level.equals(ConnectionStatus.LEVEL_NOTCONNECTED)) {
+                if (mainHandler != null) {
+                    mainHandler.post(run3);
+                }
+            } else if (level.equals(ConnectionStatus.LEVEL_CONNECTING_SERVER_REPLIED)) {
+                PreferenceManager preferenceManager = PreferenceManager.getInstance(getContext());
+                preferenceManager.setVpnStartTime(System.currentTimeMillis());
             }
-        } else if (level.equals(ConnectionStatus.LEVEL_CONNECTED)) {
-            shouldAnimate = false;
-            if (mainHandler != null) {
-                mainHandler.post(run2);
-            }
-        } else if (level.equals(ConnectionStatus.LEVEL_NOTCONNECTED)) {
-            if (mainHandler != null) {
-                mainHandler.post(run3);
-            }
-        } else if (level.equals(ConnectionStatus.LEVEL_CONNECTING_SERVER_REPLIED)) {
-            PreferenceManager preferenceManager = PreferenceManager.getInstance(getContext());
-            preferenceManager.setVpnStartTime(System.currentTimeMillis());
         }
 
     }
