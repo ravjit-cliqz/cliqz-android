@@ -76,11 +76,12 @@ public class HomeConfigPrefsBackend implements HomeConfigBackend {
                                                   EnumSet.of(PanelConfig.Flags.DEFAULT_PANEL)));
         /* Cliqz start */
         // add Offrz panel, change panels order to be TopSites, history, MyOffrz, bookmarks
-        panelConfigs.add(createBuiltinPanelConfig(mContext, PanelType.COMBINED_HISTORY));
         if (BuildConfig.FLAVOR_skin.equals("bond")) {
             panelConfigs.add(createBuiltinPanelConfig(mContext, PanelType.MY_OFFRZ, EnumSet.of(PanelConfig.Flags.DISABLED_PANEL)));
             panelConfigs.add(createBuiltinPanelConfig(mContext, PanelType.VPN));
+            panelConfigs.add(createBuiltinPanelConfig(mContext, PanelType.COMBINED_HISTORY));
         } else {
+            panelConfigs.add(createBuiltinPanelConfig(mContext, PanelType.COMBINED_HISTORY));
             panelConfigs.add(createBuiltinPanelConfig(mContext, PanelType.MY_OFFRZ));
             panelConfigs.add(createBuiltinPanelConfig(mContext, PanelType.VPN, EnumSet.of(PanelConfig.Flags.DISABLED_PANEL)));
         }
