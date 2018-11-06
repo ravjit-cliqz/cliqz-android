@@ -37,7 +37,7 @@ public class ConfirmDialog extends Activity implements
 
     public static final String EXTRA_PACKAGE_NAME = "android.intent.extra.PACKAGE_NAME";
 
-    public static final String ANONYMOUS_PACKAGE = "de.blinkt.openvpn.ANYPACKAGE";
+    public static final String ANONYMOUS_PACKAGE = "org.mozilla.gecko.vpn.ANYPACKAGE";
 
     private String mPackage;
 

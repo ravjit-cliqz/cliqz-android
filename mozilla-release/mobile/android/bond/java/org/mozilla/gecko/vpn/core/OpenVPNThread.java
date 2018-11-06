@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
 public class OpenVPNThread implements Runnable {
     private static final String DUMP_PATH_STRING = "Dump path: ";
     @SuppressLint("SdCardPath")
-    private static final String BROKEN_PIE_SUPPORT = "/data/data/de.blinkt.openvpn/cache/pievpn";
+    private static final String BROKEN_PIE_SUPPORT = "/data/data/org.mozilla.gecko.vpn/cache/pievpn";
     private final static String BROKEN_PIE_SUPPORT2 = "syntax error";
     private static final String TAG = "OpenVPN";
     public static final int M_FATAL = (1 << 4);

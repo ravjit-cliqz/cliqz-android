@@ -13,6 +13,7 @@ import org.mozilla.gecko.R;
 public class PreferenceManager {
 
     private  static final String VPN_SELECTED_COUNTRY = "vpn.selected.country";
+    private  static final String VPN_START_TIME = "vpn.start.time";
     private final SharedPreferences mAppSharedPreferences;
     private static PreferenceManager preferenceManager = null;
     private Context mContext;
@@ -57,6 +58,11 @@ public class PreferenceManager {
     public void setVpnCountry(String country) {
         final SharedPreferences.Editor editor = mAppSharedPreferences.edit();
         editor.putString(VPN_SELECTED_COUNTRY, country).apply();
+    }
+
+    public void setVpnStartTime(long time) {
+        final SharedPreferences.Editor editor = mAppSharedPreferences.edit();
+        editor.putLong(VPN_START_TIME, time).apply();
     }
 
     public boolean isTelemetryEnabled() {
@@ -116,5 +122,9 @@ public class PreferenceManager {
 
     public String getVpnSelectedCountry() {
         return mAppSharedPreferences.getString(VPN_SELECTED_COUNTRY, mContext.getString(R.string.country_germany));
+    }
+
+    public long getVpnStartTime() {
+        return mAppSharedPreferences.getLong(VPN_START_TIME, System.currentTimeMillis());
     }
 }

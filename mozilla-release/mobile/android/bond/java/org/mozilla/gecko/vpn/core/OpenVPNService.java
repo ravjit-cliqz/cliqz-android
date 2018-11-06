@@ -55,18 +55,18 @@ import static org.mozilla.gecko.vpn.core.ConnectionStatus.LEVEL_CONNECTED;
 import static org.mozilla.gecko.vpn.core.ConnectionStatus.LEVEL_WAITING_FOR_USER_INPUT;
 
 public class OpenVPNService extends VpnService implements VpnStatus.StateListener, Callback, VpnStatus.ByteCountListener, IOpenVPNServiceInternal {
-    public static final String START_SERVICE = "de.blinkt.openvpn.START_SERVICE";
-    public static final String START_SERVICE_STICKY = "de.blinkt.openvpn.START_SERVICE_STICKY";
-    public static final String ALWAYS_SHOW_NOTIFICATION = "de.blinkt.openvpn.NOTIFICATION_ALWAYS_VISIBLE";
-    public static final String DISCONNECT_VPN = "de.blinkt.openvpn.DISCONNECT_VPN";
+    public static final String START_SERVICE = "org.mozilla.gecko.vpn.START_SERVICE";
+    public static final String START_SERVICE_STICKY = "org.mozilla.gecko.vpn.START_SERVICE_STICKY";
+    public static final String ALWAYS_SHOW_NOTIFICATION = "org.mozilla.gecko.vpn.NOTIFICATION_ALWAYS_VISIBLE";
+    public static final String DISCONNECT_VPN = "org.mozilla.gecko.vpn.DISCONNECT_VPN";
     public static final String NOTIFICATION_CHANNEL_BG_ID = "openvpn_bg";
     public static final String NOTIFICATION_CHANNEL_NEWSTATUS_ID = "openvpn_newstat";
     public static final String NOTIFICATION_CHANNEL_USERREQ_ID = "openvpn_userreq";
 
     public static final String VPNSERVICE_TUN = "vpnservice-tun";
     public final static String ORBOT_PACKAGE_NAME = "org.torproject.android";
-    public static final String PAUSE_VPN = "de.blinkt.openvpn.PAUSE_VPN";
-    public static final String RESUME_VPN = "de.blinkt.openvpn.RESUME_VPN";
+    public static final String PAUSE_VPN = "org.mozilla.gecko.vpn.PAUSE_VPN";
+    public static final String RESUME_VPN = "org.mozilla.gecko.vpn.RESUME_VPN";
     private static final int PRIORITY_MIN = -2;
     private static final int PRIORITY_DEFAULT = 0;
     private static final int PRIORITY_MAX = 2;
@@ -436,7 +436,7 @@ public class OpenVPNService extends VpnService implements VpnStatus.StateListene
                 this.unregisterReceiver(mDeviceStateReceiver);
             } catch (IllegalArgumentException iae) {
                 // I don't know why  this happens:
-                // java.lang.IllegalArgumentException: Receiver not registered: de.blinkt.openvpn.NetworkSateReceiver@41a61a10
+                // java.lang.IllegalArgumentException: Receiver not registered: org.mozilla.gecko.vpn.NetworkSateReceiver@41a61a10
                 // Ignore for now ...
                 iae.printStackTrace();
             }
@@ -494,8 +494,8 @@ public class OpenVPNService extends VpnService implements VpnStatus.StateListene
         // Always show notification here to avoid problem with startForeground timeout
         VpnStatus.logInfo(R.string.building_configration);
         VpnStatus.updateStateString("VPN_GENERATE_CONFIG", "", R.string.building_configration, ConnectionStatus.LEVEL_START);
-        showNotification(VpnStatus.getLastCleanLogMessage(this),
-                VpnStatus.getLastCleanLogMessage(this), NOTIFICATION_CHANNEL_NEWSTATUS_ID, 0, ConnectionStatus.LEVEL_START);
+        //showNotification(VpnStatus.getLastCleanLogMessage(this),
+              //  VpnStatus.getLastCleanLogMessage(this), NOTIFICATION_CHANNEL_NEWSTATUS_ID, 0, ConnectionStatus.LEVEL_START);
 
         if (intent != null && intent.hasExtra(getPackageName() + ".profileUUID")) {
             String profileUUID = intent.getStringExtra(getPackageName() + ".profileUUID");
@@ -657,7 +657,7 @@ public class OpenVPNService extends VpnService implements VpnStatus.StateListene
 
     private OpenVPNManagement instantiateOpenVPN3Core() {
         try {
-            Class cl = Class.forName("de.blinkt.openvpn.core.OpenVPNThreadv3");
+            Class cl = Class.forName("org.mozilla.gecko.vpn.core.OpenVPNThreadv3");
             return (OpenVPNManagement) cl.getConstructor(OpenVPNService.class, VpnProfile.class).newInstance(this, mProfile);
         } catch (IllegalArgumentException | InstantiationException | InvocationTargetException |
                 NoSuchMethodException | ClassNotFoundException | IllegalAccessException e) {
@@ -1131,9 +1131,8 @@ public class OpenVPNService extends VpnService implements VpnStatus.StateListene
             // This also mean we are no longer connected, ignore bytecount messages until next
             // CONNECTED
             // Does not work :(
-            Log.d("###vpnservice", level.name());
-            showNotification(VpnStatus.getLastCleanLogMessage(this),
-                    VpnStatus.getLastCleanLogMessage(this), channel, 0, level);
+            //showNotification(VpnStatus.getLastCleanLogMessage(this),
+              //      VpnStatus.getLastCleanLogMessage(this), channel, 0, level);
 
         }
     }
@@ -1144,7 +1143,7 @@ public class OpenVPNService extends VpnService implements VpnStatus.StateListene
 
     private void doSendBroadcast(String state, ConnectionStatus level) {
         Intent vpnstatus = new Intent();
-        vpnstatus.setAction("de.blinkt.openvpn.VPN_STATUS");
+        vpnstatus.setAction("org.mozilla.gecko.vpn.VPN_STATUS");
         vpnstatus.putExtra("status", level.toString());
         vpnstatus.putExtra("detailstatus", state);
         sendBroadcast(vpnstatus, permission.ACCESS_NETWORK_STATE);
@@ -1160,7 +1159,7 @@ public class OpenVPNService extends VpnService implements VpnStatus.StateListene
                     humanReadableByteCount(diffOut / OpenVPNManagement.mBytecountInterval, true, getResources()));
 
 
-            showNotification(netstat, null, NOTIFICATION_CHANNEL_BG_ID, mConnecttime, LEVEL_CONNECTED);
+            //showNotification(netstat, null, NOTIFICATION_CHANNEL_BG_ID, mConnecttime, LEVEL_CONNECTED);
         }
 
     }

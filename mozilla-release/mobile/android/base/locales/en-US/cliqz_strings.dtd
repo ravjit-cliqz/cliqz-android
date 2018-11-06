@@ -303,3 +303,7 @@
 <!-- Vpn -->
 <!ENTITY country_germany "Germany">
 <!ENTITY country_united_states "United States">
+<!ENTITY vpn "VPN">
+<!ENTITY vpn_connect "Connect">
+<!ENTITY vpn_turn_on_message "Turn on VPN protection to browse safely in the internet. UPGRADE NOW">
+<!ENTITY vpn_connected_message "You are safely connected to the internet. UPGRADE NOWs">

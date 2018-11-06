@@ -63,9 +63,9 @@ import java.io.IOException;
  */
 public class LaunchVPN {
 
-    public static final String EXTRA_KEY = "de.blinkt.openvpn.shortcutProfileUUID";
-    public static final String EXTRA_NAME = "de.blinkt.openvpn.shortcutProfileName";
-    public static final String EXTRA_HIDELOG = "de.blinkt.openvpn.showNoLogWindow";
+    public static final String EXTRA_KEY = "org.mozilla.gecko.vpn.shortcutProfileUUID";
+    public static final String EXTRA_NAME = "org.mozilla.gecko.vpn.shortcutProfileName";
+    public static final String EXTRA_HIDELOG = "org.mozilla.gecko.vpn.showNoLogWindow";
     public static final String CLEARLOG = "clearlogconnect";
 
 
@@ -240,6 +240,7 @@ public class LaunchVPN {
                         showLogWindow();
                     ProfileManager.updateLRU(activity, mSelectedProfile);
                     VPNLaunchHelper.startOpenVpn(mSelectedProfile, activity);
+
                 }
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 // User does not want us to start, so we just vanish
@@ -329,6 +330,9 @@ public class LaunchVPN {
         } else {
             onActivityResult(START_VPN_PROFILE, Activity.RESULT_OK, null);
         }
+//        Intent intent1 = new Intent(activity, OpenVPNStatusService.class);
+//        activity.bindService(intent1, mConnection, Context.BIND_AUTO_CREATE);
+
 
     }
 

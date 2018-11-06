@@ -131,9 +131,9 @@ public class ExternalOpenVPNService extends Service implements VpnStatus.StateLi
 
             if(vpnPermissionIntent != null || neddPassword != 0){
                 Intent shortVPNIntent = new Intent(Intent.ACTION_MAIN);
-//                shortVPNIntent.setClass(getBaseContext(), de.blinkt.openvpn.LaunchVPN.class);
-//                shortVPNIntent.putExtra(de.blinkt.openvpn.LaunchVPN.EXTRA_KEY, vp.getUUIDString());
-//                shortVPNIntent.putExtra(de.blinkt.openvpn.LaunchVPN.EXTRA_HIDELOG, true);
+                shortVPNIntent.setClass(getBaseContext(), org.mozilla.gecko.vpn.LaunchVPN.class);
+                shortVPNIntent.putExtra(org.mozilla.gecko.vpn.LaunchVPN.EXTRA_KEY, vp.getUUIDString());
+                shortVPNIntent.putExtra(org.mozilla.gecko.vpn.LaunchVPN.EXTRA_HIDELOG, true);
                 shortVPNIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(shortVPNIntent);
             } else {

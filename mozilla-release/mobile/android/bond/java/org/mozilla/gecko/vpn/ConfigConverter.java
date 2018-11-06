@@ -31,7 +31,7 @@ import java.util.List;
 
 public class ConfigConverter {
 
-    public static final String IMPORT_PROFILE = "de.blinkt.openvpn.IMPORT_PROFILE";
+    public static final String IMPORT_PROFILE = "org.mozilla.gecko.vpn.IMPORT_PROFILE";
     private static final int RESULT_INSTALLPKCS12 = 7;
     private static final int CHOOSE_FILE_OFFSET = 1000;
     public static final String VPNPROFILE = "vpnProfile";

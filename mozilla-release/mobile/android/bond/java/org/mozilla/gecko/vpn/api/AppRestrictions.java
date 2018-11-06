@@ -33,7 +33,7 @@ import java.util.Vector;
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class AppRestrictions {
-    public static final String PROFILE_CREATOR = "de.blinkt.openvpn.api.AppRestrictions";
+    public static final String PROFILE_CREATOR = "org.mozilla.gecko.vpn.api.AppRestrictions";
     final static int CONFIG_VERSION = 1;
     static boolean alreadyChecked = false;
     private static AppRestrictions mInstance;

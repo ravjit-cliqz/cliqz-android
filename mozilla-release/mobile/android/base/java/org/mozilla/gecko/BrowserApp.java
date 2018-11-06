@@ -201,9 +201,7 @@ import org.mozilla.gecko.util.WindowUtil;
 import org.mozilla.gecko.vpn.ConfigConverter;
 import org.mozilla.gecko.vpn.DisconnectVPN;
 import org.mozilla.gecko.vpn.LaunchVPN;
-import org.mozilla.gecko.vpn.core.ConnectionStatus;
 import org.mozilla.gecko.vpn.core.ProfileManager;
-import org.mozilla.gecko.vpn.core.VpnStatus;
 import org.mozilla.gecko.widget.ActionModePresenter;
 import org.mozilla.gecko.widget.AnchoredPopup;
 import org.mozilla.gecko.widget.AnimatedProgressBar;
@@ -1144,23 +1142,17 @@ public class BrowserApp extends GeckoApp
         if (AppConstants.Versions.feature24Plus) {
             maybeShowSetDefaultBrowserDialog(sharedPreferences, appContext);
         }
-        Uri uri = Uri.parse("android.resource://"+getPackageName()+"/raw/us");
-        ConfigConverter c = new ConfigConverter(this);
-        ProfileManager m = ProfileManager.getInstance(this);
+        final Uri usVpnUri = Uri.parse("android.resource://"+getPackageName()+"/raw/us");
+        final Uri germanyVpnUri = Uri.parse("android.resource://"+getPackageName()+"/raw/germany");
+        final ConfigConverter c = new ConfigConverter(this);
+        final ConfigConverter c1 = new ConfigConverter(this);
+        final ProfileManager m = ProfileManager.getInstance(this);
         if (m.getProfileByName("us-vpn") == null) {
-            c.startImportTask(uri, "us-vpn");
+            c.startImportTask(usVpnUri, "us-vpn");
         }
-        VpnStatus.addStateListener(new VpnStatus.StateListener() {
-            @Override
-            public void updateState(String state, String logmessage, int localizedResId, ConnectionStatus level) {
-                Log.d("######", "#@$@#@#$@%@#");
-            }
-
-            @Override
-            public void setConnectedVPN(String uuid) {
-
-            }
-        });
+        if (m.getProfileByName("germany-vpn") == null) {
+            c1.startImportTask(germanyVpnUri, "germany-vpn");
+        }
         /*Cliqz End*/
     }
 
@@ -3326,7 +3318,7 @@ public class BrowserApp extends GeckoApp
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(LOGTAG, "onActivityResult: " + requestCode + ", " + resultCode + ", " + data);
-        launchVPN.onActivityResult(requestCode, resultCode, data);
+        //launchVPN.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case ACTIVITY_REQUEST_PREFERENCES:
                 // We just returned from preferences. If our locale changed,

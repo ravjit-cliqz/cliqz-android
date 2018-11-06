@@ -206,7 +206,7 @@
             android:process=":openvpn"
             tools:ignore="ExportedService">
             <intent-filter>
-                <action android:name="de.blinkt.openvpn.api.IOpenVPNAPIService" />
+                <action android:name="org.mozilla.gecko.vpn.api.IOpenVPNAPIService" />
             </intent-filter>
         </service>
         <service

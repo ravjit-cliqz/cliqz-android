@@ -23,7 +23,7 @@ import org.mozilla.gecko.vpn.core.ProfileManager;
 
 public class RemoteAction extends Activity {
 
-    public static final String EXTRA_NAME = "de.blinkt.openvpn.api.profileName";
+    public static final String EXTRA_NAME = "org.mozilla.gecko.vpn.api.profileName";
     private ExternalAppDatabase mExtAppDb;
     private boolean mDoDisconnect;
     private IOpenVPNServiceInternal mService;

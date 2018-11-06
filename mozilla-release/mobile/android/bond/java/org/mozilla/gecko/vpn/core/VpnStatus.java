@@ -72,6 +72,10 @@ public class VpnStatus {
         return mLastLevel != ConnectionStatus.LEVEL_AUTH_FAILED && !(mLastLevel == ConnectionStatus.LEVEL_NOTCONNECTED);
     }
 
+    public static boolean isVPNAConnected() {
+        return mLastLevel == ConnectionStatus.LEVEL_CONNECTED;
+    }
+
     public static String getLastCleanLogMessage(Context c) {
         String message = mLaststatemsg;
         switch (mLastLevel) {
@@ -267,7 +271,6 @@ public class VpnStatus {
 
 
     public synchronized static void addStateListener(StateListener sl) {
-        Log.d("######", "adding state listener. total = " + Integer.toString(stateListener.size()));
         if (!stateListener.contains(sl)) {
             stateListener.add(sl);
             if (mLaststate != null)

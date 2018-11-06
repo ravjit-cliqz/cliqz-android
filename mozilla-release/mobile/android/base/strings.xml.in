@@ -964,6 +964,9 @@
   <!-- Vpn -->
   <string name="country_germany">&country_germany;</string>
   <string name="country_united_states">&country_united_states;</string>
+  <string name="vpn_connect">&vpn_connect;</string>
+  <string name="vpn_turn_on_message">&vpn_turn_on_message;</string>
+  <string name="vpn_connected_message">&vpn_connected_message;</string>
   <!-- Cliqz end -->
 
 </resources>

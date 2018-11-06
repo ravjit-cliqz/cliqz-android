@@ -34,11 +34,11 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class ExtAuthHelper {
 
-    public static final String ACTION_CERT_CONFIGURATION = "de.blinkt.openvpn.api.ExternalCertificateConfiguration";
-    public static final String ACTION_CERT_PROVIDER = "de.blinkt.openvpn.api.ExternalCertificateProvider";
+    public static final String ACTION_CERT_CONFIGURATION = "org.mozilla.gecko.vpn.api.ExternalCertificateConfiguration";
+    public static final String ACTION_CERT_PROVIDER = "org.mozilla.gecko.vpn.api.ExternalCertificateProvider";
 
-    public static final String EXTRA_ALIAS = "de.blinkt.openvpn.api.KEY_ALIAS";
-    public static final String EXTRA_DESCRIPTION = "de.blinkt.openvpn.api.KEY_DESCRIPTION";
+    public static final String EXTRA_ALIAS = "org.mozilla.gecko.vpn.api.KEY_ALIAS";
+    public static final String EXTRA_DESCRIPTION = "org.mozilla.gecko.vpn.api.KEY_DESCRIPTION";
 
 
     public static void setExternalAuthProviderSpinnerList(Spinner spinner, String selectedApp) {
