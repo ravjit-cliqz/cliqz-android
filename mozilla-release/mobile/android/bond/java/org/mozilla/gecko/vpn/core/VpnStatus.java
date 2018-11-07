@@ -72,8 +72,15 @@ public class VpnStatus {
         return mLastLevel != ConnectionStatus.LEVEL_AUTH_FAILED && !(mLastLevel == ConnectionStatus.LEVEL_NOTCONNECTED);
     }
 
-    public static boolean isVPNAConnected() {
+    public static boolean isVPNConnected() {
         return mLastLevel == ConnectionStatus.LEVEL_CONNECTED;
+    }
+
+    public static boolean isVPNConnecting() {
+        return mLastLevel == ConnectionStatus.LEVEL_CONNECTING_NO_SERVER_REPLY_YET ||
+                mLastLevel == ConnectionStatus.LEVEL_CONNECTING_SERVER_REPLIED ||
+                mLastLevel == ConnectionStatus.LEVEL_START ||
+                mLastLevel == ConnectionStatus.LEVEL_VPNPAUSED;
     }
 
     public static String getLastCleanLogMessage(Context c) {

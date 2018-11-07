@@ -15,9 +15,11 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
 import android.widget.Chronometer;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -94,7 +96,7 @@ public class VpnPanel extends HomeFragment implements View.OnClickListener,
     @Override
     public void onResume() {
         super.onResume();
-        if (VpnStatus.isVPNAConnected()) {
+        if (VpnStatus.isVPNConnected()) {
             updateStateToConnected();
         } else {
             updateStateToConnect();
@@ -109,7 +111,7 @@ public class VpnPanel extends HomeFragment implements View.OnClickListener,
         if (v.getId() == R.id.vpn_country) {
             VpnCountriesDialog.show(getContext(), this);
         } else if (v.getId() == R.id.vpn_connect_button) {
-            if (VpnStatus.isVPNAConnected()) {
+            if (VpnStatus.isVPNConnected() || VpnStatus.isVPNConnecting()) {
                 disconnectVpn();
                 updateStateToConnect();
             } else {
@@ -138,6 +140,7 @@ public class VpnPanel extends HomeFragment implements View.OnClickListener,
 
     @Override
     public void updateState(String state, String logmessage, int localizedResId, ConnectionStatus level) {
+        Log.d(LOGTAG, "level " + level.name());
         if (isAdded()) {
             if (level.equals(ConnectionStatus.LEVEL_START)) {
                 if (mainHandler != null) {
@@ -268,8 +271,9 @@ public class VpnPanel extends HomeFragment implements View.OnClickListener,
         mVpnConnectButton.setBackground(getResources().getDrawable(R.drawable.vpn_button_connecting_animation));
         final RotateDrawable drawable = (RotateDrawable)mVpnConnectButton.getBackground();
         final ObjectAnimator animator = ObjectAnimator.ofInt(drawable, "level", 0, 10000);
+        animator.setInterpolator(new LinearInterpolator());
         animator.setRepeatCount(ValueAnimator.INFINITE);
-        animator.setDuration(500);
+        animator.setDuration(800);
         animator.start();
         mVpnButtonTitle.setTextColor(getResources().getColor(R.color.general_blue_color));
         mVpnButtonDesc.setTextColor(getResources().getColor(R.color.general_blue_color));
@@ -286,7 +290,7 @@ public class VpnPanel extends HomeFragment implements View.OnClickListener,
         mVpnButtonDesc.setText(R.string.vpn_disconnect);
         mVpnButtonTitle.setTextColor(getResources().getColor(R.color.general_blue_color));
         mVpnButtonDesc.setTextColor(getResources().getColor(R.color.general_blue_color));
-        mVpnConnectButton.setBackground(getResources().getDrawable(R.drawable.vpn_button_background_on));
+        mVpnConnectButton.setBackground(getResources().getDrawable(R.drawable.vpn_background_connected));
         mWorldMap.setImageResource(R.drawable.vpn_map_on);
         mVpnStatusText.setText(R.string.vpn_connected_message);
     }
@@ -300,7 +304,7 @@ public class VpnPanel extends HomeFragment implements View.OnClickListener,
         mVpnButtonDesc.setText(R.string.vpn_connect);
         mVpnButtonTitle.setTextColor(getResources().getColor(android.R.color.black));
         mVpnButtonDesc.setTextColor(getResources().getColor(android.R.color.black));
-        mVpnConnectButton.setBackground(getResources().getDrawable(R.drawable.vpn_button_background_off));
+        mVpnConnectButton.setBackground(getResources().getDrawable(R.drawable.vpn_background_connect));
         mWorldMap.setImageResource(R.drawable.vpn_map_off);
         mVpnStatusText.setText(R.string.vpn_turn_on_message);
     }

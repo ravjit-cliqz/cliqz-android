@@ -199,7 +199,6 @@ import org.mozilla.gecko.util.StringUtils;
 import org.mozilla.gecko.util.ThreadUtils;
 import org.mozilla.gecko.util.WindowUtil;
 import org.mozilla.gecko.vpn.ConfigConverter;
-import org.mozilla.gecko.vpn.DisconnectVPN;
 import org.mozilla.gecko.vpn.LaunchVPN;
 import org.mozilla.gecko.vpn.core.ProfileManager;
 import org.mozilla.gecko.widget.ActionModePresenter;
@@ -4563,18 +4562,6 @@ public class BrowserApp extends GeckoApp
         if (itemId == R.id.new_private_tab) {
             addPrivateTab();
             return true;
-        }
-
-        if (itemId == R.id.connect_vpn) {
-            ProfileManager m = ProfileManager.getInstance(this);
-            launchVPN = new LaunchVPN(m.getProfileByName("us-vpn"), this);
-            launchVPN.launchVPN();
-            return true;
-        }
-
-        if (itemId == R.id.disconnect_vpn) {
-            Intent disconnectVPN = new Intent(this, DisconnectVPN.class);
-            startActivity(disconnectVPN);
         }
 
         if (itemId == R.id.new_guest_session) {

@@ -45,7 +45,7 @@
         android:layout_height="120dp"
         android:layout_above="@id/vpn_status_text"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/vpn_button_background_off"
+        android:background="@drawable/vpn_background_connect"
         android:gravity="center"
         android:orientation="vertical">
 
