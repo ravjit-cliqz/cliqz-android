@@ -239,7 +239,7 @@ android {
                 srcDir "${topsrcdir}/mobile/android/app/src/standard/java"
             }
             res {
-                srcDir "${topsrcdir}/mobile/android/app/src/bond/res"
+                srcDir "${topsrcdir}/mobile/android/app/src/standard/res"
             }
         }
         bond {
