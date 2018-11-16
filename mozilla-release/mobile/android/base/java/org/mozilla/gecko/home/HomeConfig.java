@@ -55,7 +55,8 @@ public final class HomeConfig {
 
         /* Cliqz start */
         // add MyOffrz Panel type
-        MY_OFFRZ("my_offrz",MyOffrzPanel.class);
+        MY_OFFRZ("my_offrz",MyOffrzPanel.class),
+        VPN("vpn", VpnPanel.class);
         /* Cliqz end */
 
         private final String mId;
@@ -443,6 +444,8 @@ public final class HomeConfig {
                     return R.drawable.ic_offrz;
                 case BOOKMARKS_PANEL_ID:
                     return R.drawable.ic_star_white;
+                case VPN_PANEL_ID:
+                    return R.drawable.ic_vpn_icon;
                 default:
                     return R.drawable.ic_history_white;
             }
@@ -1636,6 +1639,7 @@ public final class HomeConfig {
     private static final String REMOTE_TABS_PANEL_ID = "72429afd-8d8b-43d8-9189-14b779c563d0";
     private static final String DEPRECATED_READING_LIST_PANEL_ID = "20f4549a-64ad-4c32-93e4-1dcef792733b";
     private static final String MY_OFFRZ_PANEL_ID = "4b3eded8-02ce-e304-9b54-6e5e21121633";
+    private static final String VPN_PANEL_ID = "bf8e4352-8468-4723-95b5-713f89606adf";
     /* Cliqz end */
 
     private final HomeConfigBackend mBackend;
@@ -1687,6 +1691,8 @@ public final class HomeConfig {
         // return MyOffrz title in case of MyOffrz type
         case MY_OFFRZ:
             return R.string.myoffrz_title;
+        case VPN:
+             return R.string.myoffrz_title;
         /* Cliqz end */
 
         default:
@@ -1722,6 +1728,9 @@ public final class HomeConfig {
         // return MyOffrz Id in case of MyOffrz type
         case MY_OFFRZ:
             return  MY_OFFRZ_PANEL_ID;
+
+        case VPN:
+            return VPN_PANEL_ID;
         /* Cliqz end */
 
         default:

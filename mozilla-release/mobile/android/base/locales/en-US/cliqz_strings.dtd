@@ -304,6 +304,16 @@
 <!ENTITY prevent_ghostery_addon_dialog_message
         "Add-on was not installed as &formatS1; is already integrated in your browser.">
 
+<!-- Vpn -->
+<!ENTITY country_germany "Germany">
+<!ENTITY country_united_states "United States">
+<!ENTITY vpn "VPN">
+<!ENTITY vpn_connect "Connect">
+<!ENTITY vpn_disconnect "Disconnect">
+<!ENTITY vpn_turn_on_message "Turn on VPN protection to browse safely in the internet. UPGRADE NOW">
+<!ENTITY vpn_connected_message "You are safely connected to the internet.">
+<!ENTITY vpn_connecting_message "Connecting">
+
 <!-- Cliqz Bond -->
 <!ENTITY bond_dashboard_today_title "TODAY">
 <!ENTITY bond_dashboard_week_title "LAST 7 Days">

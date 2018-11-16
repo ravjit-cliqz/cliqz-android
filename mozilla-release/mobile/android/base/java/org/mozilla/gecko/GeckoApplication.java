@@ -10,15 +10,16 @@ import android.app.Application;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Process;
+import android.os.StrictMode;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -61,6 +62,8 @@ import org.mozilla.gecko.util.HardwareUtils;
 import org.mozilla.gecko.util.PRNGFixes;
 import org.mozilla.gecko.util.ShortcutUtils;
 import org.mozilla.gecko.util.ThreadUtils;
+import org.mozilla.gecko.vpn.api.AppRestrictions;
+import org.mozilla.gecko.vpn.core.StatusListener;
 import org.mozilla.geckoview.GeckoRuntime;
 import org.mozilla.geckoview.GeckoRuntimeSettings;
 
@@ -71,6 +74,8 @@ import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.UUID;
+
+import static org.mozilla.gecko.vpn.core.PRNGFixes.*;
 
 public class GeckoApplication extends Application
                               implements HapticFeedbackDelegate {
@@ -89,6 +94,8 @@ public class GeckoApplication extends Application
     private final EventListener mListener = new EventListener();
 
     private static String sSessionUUID = null;
+
+    private StatusListener mStatus;
 
     public GeckoApplication() {
         super();
@@ -384,6 +391,28 @@ public class GeckoApplication extends Application
         /* Cliqz end */
 
         super.onCreate();
+
+        apply();
+
+        mStatus = new StatusListener();
+        mStatus.init(getApplicationContext());
+
+        if (BuildConfig.BUILD_TYPE.equals("debug"))
+            enableStrictModes();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            AppRestrictions.getInstance(this).checkRestrictions(this);
+        }
+    }
+
+    private void enableStrictModes() {
+        StrictMode.VmPolicy policy = new StrictMode.VmPolicy.Builder()
+                .detectAll()
+                .penaltyLog()
+                .penaltyDeath()
+                .build();
+        StrictMode.setVmPolicy(policy);
+
     }
 
     @Override

@@ -189,7 +189,7 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
     } as StandardOutputListener
 
     kotlinOptions {
-        allWarningsAsErrors = true
+        allWarningsAsErrors = false
     }
 
     doFirst {
