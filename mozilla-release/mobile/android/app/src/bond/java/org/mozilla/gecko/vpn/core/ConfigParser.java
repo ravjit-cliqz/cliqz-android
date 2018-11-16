@@ -5,7 +5,6 @@
 
 package org.mozilla.gecko.vpn.core;
 
-import android.os.Build;
 import android.support.v4.util.Pair;
 import android.text.TextUtils;
 

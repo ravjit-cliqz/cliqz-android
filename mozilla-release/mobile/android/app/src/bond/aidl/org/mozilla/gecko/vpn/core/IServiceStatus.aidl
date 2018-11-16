@@ -6,7 +6,6 @@ import org.mozilla.gecko.vpn.core.IStatusCallbacks;
 import android.os.ParcelFileDescriptor;
 import org.mozilla.gecko.vpn.core.TrafficHistory;
 
-
 interface IServiceStatus {
          /**
           * Registers to receive OpenVPN Status Updates and gets a

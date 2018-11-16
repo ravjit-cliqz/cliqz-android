@@ -75,8 +75,6 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.UUID;
 
-import static org.mozilla.gecko.vpn.core.PRNGFixes.*;
-
 public class GeckoApplication extends Application
                               implements HapticFeedbackDelegate {
     private static final String LOG_TAG = "GeckoApplication";
@@ -392,16 +390,16 @@ public class GeckoApplication extends Application
 
         super.onCreate();
 
-        apply();
+        if (BuildConfig.FLAVOR_skin.equals("bond")) {
+            mStatus = new StatusListener();
+            mStatus.init(getApplicationContext());
 
-        mStatus = new StatusListener();
-        mStatus.init(getApplicationContext());
+            if (BuildConfig.BUILD_TYPE.equals("debug"))
+                enableStrictModes();
 
-        if (BuildConfig.BUILD_TYPE.equals("debug"))
-            enableStrictModes();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            AppRestrictions.getInstance(this).checkRestrictions(this);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                AppRestrictions.getInstance(this).checkRestrictions(this);
+            }
         }
     }
 

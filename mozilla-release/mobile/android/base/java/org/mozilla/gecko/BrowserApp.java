@@ -192,7 +192,6 @@ import org.mozilla.gecko.util.StringUtils;
 import org.mozilla.gecko.util.ThreadUtils;
 import org.mozilla.gecko.util.WindowUtil;
 import org.mozilla.gecko.vpn.ConfigConverter;
-import org.mozilla.gecko.vpn.LaunchVPN;
 import org.mozilla.gecko.vpn.core.ProfileManager;
 import org.mozilla.gecko.widget.ActionModePresenter;
 import org.mozilla.gecko.widget.AnchoredPopup;
@@ -270,7 +269,6 @@ public class BrowserApp extends GeckoApp
 
     private BrowserSearch mBrowserSearch;
     private View mBrowserSearchContainer;
-    private LaunchVPN launchVPN;
     public ViewGroup mBrowserChrome;
     public ViewFlipper mActionBarFlipper;
     public ActionModeCompatView mActionBar;

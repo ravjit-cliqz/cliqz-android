@@ -252,8 +252,6 @@ public class ConfigConverter {
             protected void onPostExecute(Integer errorCode) {
                 if (errorCode == 0) {
                     mResult.mName = getUniqueProfileName(possibleName);
-                    mResult.mUsername = "cliqz";
-                    mResult.mPassword = "9kYF2SVEetmS";
                     saveProfile();
                 }
             }

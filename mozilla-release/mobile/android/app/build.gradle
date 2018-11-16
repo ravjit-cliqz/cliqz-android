@@ -274,7 +274,10 @@ android {
                 srcDir "${topsrcdir}/mobile/build/ovpnassets"
             }
             jniLibs {
-                srcDir "${topsrcdir}/mobile/android/bond/jniLibs"
+                srcDir "${topsrcdir}/mobile/android/app/src/bond/jniLibs"
+            }
+            proto {
+                srcDir "${topsrcdir}/mobile/android/app/src/bond/proto"
             }
         }
         standard {

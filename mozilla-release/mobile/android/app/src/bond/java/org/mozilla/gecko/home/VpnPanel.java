@@ -27,6 +27,7 @@ import android.widget.TextView;
 import org.mozilla.gecko.R;
 import org.mozilla.gecko.preferences.PreferenceManager;
 import org.mozilla.gecko.vpn.LaunchVPN;
+import org.mozilla.gecko.vpn.VpnProfile;
 import org.mozilla.gecko.vpn.core.ConnectionStatus;
 import org.mozilla.gecko.vpn.core.IOpenVPNServiceInternal;
 import org.mozilla.gecko.vpn.core.LogItem;
@@ -214,10 +215,18 @@ public class VpnPanel extends HomeFragment implements View.OnClickListener,
     }
 
     private void connectVpn() {
+
         final String vpnCountry = PreferenceManager.getInstance(getContext()).getVpnSelectedCountry();
         final ProfileManager m = ProfileManager.getInstance(getContext());
-        final LaunchVPN launchVPN = new LaunchVPN(m.getProfileByName(
-                vpnCountry.equalsIgnoreCase("Germany") ? "germany-vpn" : "us-vpn"), getActivity());
+        final VpnProfile vpnProfile = m.getProfileByName(
+                vpnCountry.equalsIgnoreCase("Germany") ? "germany-vpn" : "us-vpn");
+        vpnProfile.mUsername = "cliqz";
+        if (vpnCountry.equals("Germany")) {
+          //  vpnProfile.mPassword = dePassword;
+        } else {
+          //  vpnProfile.mPassword = usPassowrd;
+        }
+        final LaunchVPN launchVPN = new LaunchVPN(vpnProfile, getActivity());
 
         launchVPN.launchVPN();
         final Intent pauseVPN = new Intent(getActivity(), OpenVPNService.class);

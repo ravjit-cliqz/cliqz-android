@@ -9,7 +9,6 @@ import org.mozilla.gecko.vpn.core.LogItem;
 import org.mozilla.gecko.vpn.core.ConnectionStatus;
 
 
-
 interface IStatusCallbacks {
     /**
      * Called when the service has a new status for you.
