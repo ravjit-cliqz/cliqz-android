@@ -215,16 +215,16 @@ public class VpnPanel extends HomeFragment implements View.OnClickListener,
     }
 
     private void connectVpn() {
-
+        final PreferenceManager preferenceManager = PreferenceManager.getInstance(getContext());
         final String vpnCountry = PreferenceManager.getInstance(getContext()).getVpnSelectedCountry();
         final ProfileManager m = ProfileManager.getInstance(getContext());
         final VpnProfile vpnProfile = m.getProfileByName(
                 vpnCountry.equalsIgnoreCase("Germany") ? "germany-vpn" : "us-vpn");
         vpnProfile.mUsername = "cliqz";
         if (vpnCountry.equals("Germany")) {
-          //  vpnProfile.mPassword = dePassword;
+            vpnProfile.mPassword = preferenceManager.getVpnDePassword();
         } else {
-          //  vpnProfile.mPassword = usPassowrd;
+            vpnProfile.mPassword = preferenceManager.getVpnUsPassword();
         }
         final LaunchVPN launchVPN = new LaunchVPN(vpnProfile, getActivity());
 

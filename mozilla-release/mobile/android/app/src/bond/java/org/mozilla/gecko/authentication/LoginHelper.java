@@ -13,6 +13,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
+import com.google.protobuf.GeneratedMessageLite;
+
+import org.mozilla.gecko.OVPNResponse;
 import org.mozilla.gecko.R;
 import org.mozilla.gecko.Response;
 import org.mozilla.gecko.preferences.PreferenceManager;
@@ -69,31 +72,30 @@ public class LoginHelper implements View.OnClickListener, TalkToServer.ServerCal
     }
 
     @Override
-    public void onServerReplied(Response serverResponse, int whichCase) {
+    public void onServerReplied(GeneratedMessageLite serverResponse, int whichCase) {
         switch (whichCase) {
             case TalkToServer.IS_DEVICE_ACTIVE:
-                if (serverResponse.getErrorCount() > 0) {
+                if (((Response)serverResponse).getErrorCount() > 0) {
                     Log.e(LOGTAG, "Device not activated yet");
-                    Log.e(LOGTAG, serverResponse.getErrorList().toString());
                     //device is not activated
                     //show "loginscreen" or probably "waiting for activation screen" ?
                     showLoginScreen();
                 } else {
                     //login successful
                     //TODO show welcome screen, if first login
+                    getVpnCreds(mPreferenceManager.getEmailId());
                 }
                 break;
             case TalkToServer.REGISTER_DEVICE:
-                if (serverResponse.getErrorCount() > 0) {
+                if (((Response)serverResponse).getErrorCount() > 0) {
                     Log.e(LOGTAG, "Error registering device.");
-                    Log.e(LOGTAG, serverResponse.getErrorList().toString());
                 } else {
                     //start polling until user activates device
                     pollServerForActivation();
                 }
                 break;
             case TalkToServer.WAIT_FOR_ACTIVATION:
-                if (serverResponse.getErrorCount() > 0) {
+                if (((Response)serverResponse).getErrorCount() > 0) {
                     Log.e(LOGTAG, "device is still not active");
                 } else {
                     //device activated. hide login screen
@@ -101,6 +103,14 @@ public class LoginHelper implements View.OnClickListener, TalkToServer.ServerCal
                     mProgressBar.setVisibility(View.GONE);
                     mLoginScreenStub.setVisibility(View.GONE);
                     //TODO show welome screen if first login
+                }
+                break;
+            case TalkToServer.GET_VPN_CREDS:
+                if (((OVPNResponse)serverResponse).getErrorCount() > 0) {
+                    Log.e(LOGTAG, "error getting vpn creds");
+                } else {
+                    mPreferenceManager.setVpnPasswordUs(((OVPNResponse)serverResponse).getConfigMap().get("us").getPassword());
+                    mPreferenceManager.setVpnPasswordDe(((OVPNResponse)serverResponse).getConfigMap().get("de").getPassword());
                 }
                 break;
         }
@@ -112,6 +122,10 @@ public class LoginHelper implements View.OnClickListener, TalkToServer.ServerCal
 
     private void registerDevice(String emailId) {
         new TalkToServer(this, TalkToServer.REGISTER_DEVICE, emailId, mSecretKey).execute();
+    }
+
+    private void getVpnCreds(String emailId) {
+        new TalkToServer(this, TalkToServer.GET_VPN_CREDS, emailId, mSecretKey).execute();
     }
 
     private void pollServerForActivation() {

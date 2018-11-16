@@ -12,9 +12,11 @@ import org.mozilla.gecko.R;
  */
 public class PreferenceManager {
 
-    private  static final String VPN_SELECTED_COUNTRY = "vpn.selected.country";
-    private  static final String VPN_START_TIME = "vpn.start.time";
+    private static final String VPN_SELECTED_COUNTRY = "vpn.selected.country";
+    private static final String VPN_START_TIME = "vpn.start.time";
     private static final String PREF_EMAIL_ID = "preferences.email.id";
+    private static final String VPN_US_PASSWORD = "vpn.us.password";
+    private static final String VPN_DE_PASSWORD = "vpn.de.password";
 
     private final SharedPreferences mAppSharedPreferences;
     private static PreferenceManager preferenceManager = null;
@@ -70,6 +72,16 @@ public class PreferenceManager {
     public void setEmailId(String emailId) {
         final SharedPreferences.Editor editor = mAppSharedPreferences.edit();
         editor.putString(PREF_EMAIL_ID, emailId).apply();
+    }
+
+    public void setVpnPasswordUs(String password) {
+        final SharedPreferences.Editor editor = mAppSharedPreferences.edit();
+        editor.putString(VPN_US_PASSWORD, password).apply();
+    }
+
+    public void setVpnPasswordDe(String password) {
+        final SharedPreferences.Editor editor = mAppSharedPreferences.edit();
+        editor.putString(VPN_DE_PASSWORD, password).apply();
     }
 
     public boolean isTelemetryEnabled() {
@@ -138,4 +150,13 @@ public class PreferenceManager {
     public String getEmailId() {
         return mAppSharedPreferences.getString(PREF_EMAIL_ID, "");
     }
+
+    public String getVpnUsPassword() {
+        return mAppSharedPreferences.getString(VPN_US_PASSWORD, "");
+    }
+
+    public String getVpnDePassword() {
+        return mAppSharedPreferences.getString(VPN_DE_PASSWORD, "");
+    }
+
 }
