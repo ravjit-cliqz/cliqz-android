@@ -2,6 +2,7 @@ package org.mozilla.gecko.authentication;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.net.Uri;
 import android.os.Handler;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,8 @@ import org.mozilla.gecko.OVPNResponse;
 import org.mozilla.gecko.R;
 import org.mozilla.gecko.Response;
 import org.mozilla.gecko.preferences.PreferenceManager;
+import org.mozilla.gecko.vpn.ConfigConverter;
+import org.mozilla.gecko.vpn.core.ProfileManager;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -57,6 +60,7 @@ public class LoginHelper implements View.OnClickListener, TalkToServer.ServerCal
             //check if device is activated
             checkDeviceRegistered(emailId);
         }
+        importVpnProfiles();
     }
 
     @Override
@@ -103,6 +107,7 @@ public class LoginHelper implements View.OnClickListener, TalkToServer.ServerCal
                     mProgressBar.setVisibility(View.GONE);
                     mLoginScreenStub.setVisibility(View.GONE);
                     //TODO show welome screen if first login
+                    getVpnCreds(mPreferenceManager.getEmailId());
                 }
                 break;
             case TalkToServer.GET_VPN_CREDS:
@@ -155,5 +160,19 @@ public class LoginHelper implements View.OnClickListener, TalkToServer.ServerCal
         mContinueButton.setOnClickListener(this);
         mEmailInputField = loginScreenView.findViewById(R.id.bond_email_input_field);
         mProgressBar = loginScreenView.findViewById(R.id.progress_bar);
+    }
+
+    private void importVpnProfiles() {
+        final ProfileManager profileManager = ProfileManager.getInstance(mActivity);
+        if (profileManager.getProfileByName("us-vpn") == null) {
+            final Uri usVpnUri = Uri.parse("android.resource://" + mActivity.getPackageName() + "/raw/us");
+            final ConfigConverter usConvertor = new ConfigConverter(mActivity);
+            usConvertor.startImportTask(usVpnUri, "us-vpn");
+		}
+		if (profileManager.getProfileByName("germany-vpn") == null) {
+            final Uri germanyVpnUri = Uri.parse("android.resource://" + mActivity.getPackageName() + "/raw/germany");
+            final ConfigConverter deConvertor = new ConfigConverter(mActivity);
+            deConvertor.startImportTask(germanyVpnUri, "germany-vpn");
+        }
     }
 }

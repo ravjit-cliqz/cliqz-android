@@ -191,8 +191,6 @@ import org.mozilla.gecko.util.ShortcutUtils;
 import org.mozilla.gecko.util.StringUtils;
 import org.mozilla.gecko.util.ThreadUtils;
 import org.mozilla.gecko.util.WindowUtil;
-import org.mozilla.gecko.vpn.ConfigConverter;
-import org.mozilla.gecko.vpn.core.ProfileManager;
 import org.mozilla.gecko.widget.ActionModePresenter;
 import org.mozilla.gecko.widget.AnchoredPopup;
 import org.mozilla.gecko.widget.AnimatedProgressBar;
@@ -1021,18 +1019,6 @@ public class BrowserApp extends GeckoApp
 
         if (AppConstants.Versions.feature24Plus) {
             maybeShowSetDefaultBrowserDialog(sharedPreferences, appContext);
-        }
-        final Uri usVpnUri = Uri.parse("android.resource://"+getPackageName()+"/raw/us");
-        final Uri germanyVpnUri = Uri.parse("android.resource://"+getPackageName()+"/raw/germany");
-        final ConfigConverter c = new ConfigConverter(this);
-        final ConfigConverter c1 = new ConfigConverter(this);
-        final ProfileManager m = ProfileManager.getInstance(this);
-        if (m.getProfileByName("us-vpn") == null) {
-            c.startImportTask(usVpnUri, "us-vpn");
-		}
-
-		if (m.getProfileByName("germany-vpn") == null) {
-            c1.startImportTask(germanyVpnUri, "germany-vpn");
         }
 
         // Splash screen runs at most for 4 seconds.
