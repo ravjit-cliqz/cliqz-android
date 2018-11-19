@@ -67,7 +67,6 @@ public class VpnPanel extends HomeFragment implements View.OnClickListener,
 
     };
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -119,7 +118,6 @@ public class VpnPanel extends HomeFragment implements View.OnClickListener,
                 connectVpn();
             }
         }
-
     }
 
     @Override
@@ -145,16 +143,16 @@ public class VpnPanel extends HomeFragment implements View.OnClickListener,
         if (isAdded()) {
             if (level.equals(ConnectionStatus.LEVEL_START)) {
                 if (mainHandler != null) {
-                    mainHandler.post(run1);
+                    mainHandler.post(mConnectingRunnable);
                 }
             } else if (level.equals(ConnectionStatus.LEVEL_CONNECTED)) {
                 shouldAnimate = false;
                 if (mainHandler != null) {
-                    mainHandler.post(run2);
+                    mainHandler.post(mConnectedRunnable);
                 }
             } else if (level.equals(ConnectionStatus.LEVEL_NOTCONNECTED)) {
                 if (mainHandler != null) {
-                    mainHandler.post(run3);
+                    mainHandler.post(mConnectRunnable);
                 }
             } else if (level.equals(ConnectionStatus.LEVEL_CONNECTING_SERVER_REPLIED)) {
                 PreferenceManager preferenceManager = PreferenceManager.getInstance(getContext());
@@ -165,24 +163,23 @@ public class VpnPanel extends HomeFragment implements View.OnClickListener,
 
     @Override
     public void setConnectedVPN(String uuid) {
-
     }
 
-    Runnable run1 = new Runnable() {
+    private final Runnable mConnectingRunnable = new Runnable() {
         @Override
         public void run() {
             updateStateToConnecting();
         }
     };
 
-    Runnable run2 = new Runnable() {
+    private final Runnable mConnectedRunnable = new Runnable() {
         @Override
         public void run() {
             updateStateToConnected();
         }
     };
 
-    Runnable run3 = new Runnable() {
+    private final Runnable mConnectRunnable = new Runnable() {
         @Override
         public void run() {
             updateStateToConnect();
@@ -235,6 +232,7 @@ public class VpnPanel extends HomeFragment implements View.OnClickListener,
         resumeVPN.setAction(OpenVPNService.RESUME_VPN);
         final PendingIntent pauseVPNPending = PendingIntent.getService(getActivity(), 0, pauseVPN, 0);
         final PendingIntent resumeVPNPending = PendingIntent.getService(getActivity(), 0, resumeVPN, 0);
+        //Sometimes vpn gets stuck at connecting. Pausing and resuming the vpn guarantees that it connects 100% of the time
         getView().postDelayed(new Runnable() {
             @Override
             public void run() {

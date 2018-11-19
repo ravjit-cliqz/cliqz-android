@@ -78,53 +78,6 @@ public class ConfirmDialog extends Activity implements
                 return;
             }
         }
-
-        /*try {
-            View view = View.inflate(this, R.layout.api_confirm, null);
-            CharSequence appString;
-            if (mPackage.equals(ANONYMOUS_PACKAGE)) {
-                appString = getString(R.string.all_app_prompt, getString(R.string.app));
-            } else {
-                PackageManager pm = getPackageManager();
-                ApplicationInfo app = pm.getApplicationInfo(mPackage, 0);
-                appString = getString(R.string.prompt, app.loadLabel(pm), getString(R.string.app));
-                ((ImageView) view.findViewById(R.id.icon)).setImageDrawable(app.loadIcon(pm));
-            }
-
-
-            ((TextView) view.findViewById(R.id.prompt)).setText(appString);
-            ((CompoundButton) view.findViewById(R.id.check)).setOnCheckedChangeListener(this);
-
-
-            Builder builder = new AlertDialog.Builder(this);
-
-            builder.setView(view);
-
-            builder.setIconAttribute(android.R.attr.alertDialogIcon);
-            builder.setTitle(android.R.string.dialog_alert_title);
-            builder.setPositiveButton(android.R.string.ok, this);
-            builder.setNegativeButton(android.R.string.cancel, this);
-
-            mAlert = builder.create();
-            mAlert.setCanceledOnTouchOutside(false);
-
-            mAlert.setOnShowListener(new OnShowListener() {
-                @Override
-                public void onShow(DialogInterface dialog) {
-                    mButton = mAlert.getButton(DialogInterface.BUTTON_POSITIVE);
-                    mButton.setEnabled(false);
-
-                }
-            });
-
-            //setCloseOnTouchOutside(false);
-
-            mAlert.show();
-
-        } catch (Exception e) {
-            Log.e(TAG, "onResume", e);
-            finish();
-        }*/
     }
 
     @Override

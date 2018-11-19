@@ -155,30 +155,6 @@ public class ExternalOpenVPNService extends Service implements VpnStatus.StateLi
 
         public void startVPN(String inlineConfig) throws RemoteException {
             String callingApp = mExtAppDb.checkOpenVPNPermission(getPackageManager());
-
-//            ConfigParser cp = new ConfigParser();
-//            try {
-//                cp.parseConfig(new StringReader(inlineConfig));
-//                VpnProfile vp = cp.convertProfile();
-//                vp.mName = "Remote APP VPN";
-//                if (vp.checkProfile(getApplicationContext()) != R.string.no_error_found)
-//                    throw new RemoteException(getString(vp.checkProfile(getApplicationContext())));
-//
-//                vp.mProfileCreator = callingApp;
-//
-//
-//                /*int needpw = vp.needUserPWInput(false);
-//                if(needpw !=0)
-//                    throw new RemoteException("The inline file would require user input: " + getString(needpw));
-//                    */
-//
-//                ProfileManager.setTemporaryProfile(ExternalOpenVPNService.this, vp);
-//
-//                startProfile(vp);
-//
-//            } catch (IOException | ConfigParseError e) {
-//                throw new RemoteException(e.getMessage());
-//            }
         }
 
 

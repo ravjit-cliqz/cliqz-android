@@ -28,12 +28,8 @@ android {
         testInstrumentationRunner 'org.mozilla.gecko.FennecInstrumentationTestRunner'
         // Used by Robolectric based tests; see TestRunner.
         buildConfigField 'String', 'BUILD_DIR', "\"${project.buildDir}\""
-        //buildConfigField 'boolean', 'openvpn3', 'false'
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
-        ndk {
-            abiFilters "armeabi-v7a", "x86"
-        }
     }
     signingConfigs {
         if (System.getenv('CERT_PATH') && System.getenv('CERT_PASS')) {
@@ -127,11 +123,6 @@ android {
             dimension "skin"
             /* Cliqz start */
             versionCode 5
-            externalNativeBuild {
-                cmake {
-                    arguments "-DFLAVOR=PHOTON"
-                }
-            }
             /* Cliqz end */
         }
         /* Cliqz start */
@@ -141,11 +132,6 @@ android {
         bond {
             dimension "skin"
             versionCode 5
-            externalNativeBuild {
-                cmake {
-                    arguments "-DFLAVOR=BOND"
-                }
-            }
         }
 
         standard {
@@ -153,10 +139,6 @@ android {
             versionCode 5
         }
         /* Cliqz end */
-    }
-
-    dexOptions {
-        javaMaxHeapSize "4g"
     }
 
     sourceSets {
@@ -304,11 +286,6 @@ android {
             maxParallelForks 1
         }
     }
-//    externalNativeBuild {
-//        cmake {
-//            path file('../bond/cpp/CMakeLists.txt')
-//        }
-//    }
 }
 
 dependencies {
