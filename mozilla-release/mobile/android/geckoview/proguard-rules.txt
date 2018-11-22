@@ -166,3 +166,13 @@
 -keepclasseswithmembers class * {
     @org.mozilla.gecko.annotation.ReflectionTarget <fields>;
 }
+
+# Cliqz Start
+# copied proguard rules from sample GRPC project
+-dontwarn com.google.common.**
+# Ignores: can't find referenced class javax.lang.model.element.Modifier
+-dontwarn com.google.errorprone.annotations.**
+-dontwarn javax.naming.**
+-dontwarn okio.**
+-dontwarn sun.misc.Unsafe
+#Cliqz End
